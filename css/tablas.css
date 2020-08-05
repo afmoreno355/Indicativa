@@ -1,0 +1,146 @@
+.tableIntD{
+      position: absolute;
+      margin-top: 100px;
+      width: 100%;
+      height: 450px;
+   }
+.tableIntDa{
+      margin-top: 20px;
+   }
+
+   .tableIntT {    
+        width: 90%;    
+        margin-left: 5%;
+        border-collapse: collapse;    
+   }
+
+   .sombra{    
+        border-radius: 4px;
+        box-shadow: 2px 2px 10px #666; 
+   }
+
+   .c{
+    margin-top: 10px;
+    /*position: absolute;
+    top: 500px;*/
+   }
+
+   .tableIntTa tr:nth-child(even){
+        background-color: #ddd;
+    }
+
+    .tableIntTa tr:hover td{
+       background: rgb(76, 179, 230);
+       color: #fff; 
+    }
+
+  .noHover:hover {
+       background: none;
+       color:black;
+    }
+
+   .tableIntT th, .tableIntT td{
+      text-align: center;      
+      border-left: none;
+      border-right: none;
+      padding: 5px;
+   }
+
+   .tableIntT th{
+      background: #fc7323;  
+      color: white;
+   }
+
+   .tableIntT td{
+      font-stretch: extra-condensed;
+   }
+
+   .tableIntT .pag{
+      position: relative; 
+      font-size: 2em;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+      width: 65px;
+      height: 35px;
+      margin-top: -20px;
+
+   }
+
+   .tableIntT button{
+      background: transparent;
+      border:none;
+      font-size: 2em;
+   }
+   
+    .tableIntT input[type='button']{
+      color: white;
+      outline:none;
+      width: 100px;
+      height: 40px;
+      font-size: 0.8em;
+      border:none;
+      border-radius: 4px;
+   }
+
+ .tableIntT input[name='1']{
+     background: rgba(22, 160, 133 );
+      cursor: pointer;
+  }
+
+  .tableIntT input[name='2']{
+     margin-left: 5px;
+     background: rgba(52, 152, 219);  
+     cursor: pointer;
+   }
+   
+  .tableIntT input[name='3']{
+     margin-left: 5px;
+     background: #fc7323;  
+     cursor: pointer;
+  }
+
+   .tableIntT .plus{
+      width: 80px;
+      height: 25px;
+      font-size: 1.5em;
+      background: rgba( 230, 126, 34);
+      color: white;
+      border-radius: 4px;      
+   }
+   
+   .diferente{
+       background: white;
+   }
+   
+   .diferente td{
+       display:flex; 
+       flex-wrap: wrap; 
+       float: right;
+       padding: 10px; 
+       background: white;
+   }
+   
+    .tableIntTa input[type='button']{
+      width: 70px;
+      height: 25px;
+      padding: 0px;
+      font-size: 0.65em;
+      cursor: pointer;
+   }
+   
+ 
+    @media(max-width:1100px){
+        .noDisplay{
+            display: none
+        }
+        .tableIntD{
+            width: 100%;
+            height: 450px;
+            margin-left: 0%;       
+         }
+    }
+   
+   
+   
+  

@@ -1,0 +1,42 @@
+
+
+
+     .buscar{
+     	position: absolute;
+     	margin-top: -40px;
+     	align-items: center;
+     	justify-content: center;
+     	text-align: center;
+     	border-radius: 15px 15px 0px 0px;
+     	width: 90%;
+     	height: 80px;
+     	margin-left: 5%;
+        background:  transparent;  
+     }
+
+     .bucarPalabraClave{
+        box-shadow: 2px 2px 15px #222 inset;
+     	position: absolute;
+     	border-radius: 18px 0px 0px 18px;
+     	border:none;
+    	top: 23px;
+    	width: 40%;
+    	height: 30px;    	
+    	outline:none;
+    	text-align: center;
+     }
+
+     .buscar input[name="serch"]{     
+        border-radius: 0px 18px 18px 0px;	
+     	margin-top: 23px;
+     	height: 32px;
+     	background:  #238276;
+        color: white;
+     	border: none;
+     	margin-left: 40%;
+     	outline:none;
+        cursor: pointer;
+     }
+     
+    
+     

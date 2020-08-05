@@ -1,0 +1,71 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 25/04/2020, 07:17:33 PM
+    Author     : FELIP
+*/
+
+.sectiones{
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    margin-bottom: 50px;
+}
+.sectiones section{
+    display: block;
+    margin-left: 50px;
+    margin-top: 20px;
+    position: relative;
+    width: 650px;
+    height: 250px;
+}
+.sectiones img{
+    margin-left: -250px;
+    height: 100%;
+    width: 400px;
+}
+.sectiones p{
+    width: 200px;
+    position: relative;
+    left: 425px;
+    margin-top: -250px;
+    text-align: justify;
+}
+
+@media(max-width:950px){ 
+  .sectiones section{
+     width: 550px;
+     height: 200px;
+     margin-bottom: 20px;
+  }
+  .sectiones img{
+    width: 350px;
+    margin-left: -400px;
+  } 
+  .sectiones p{
+      left: 275px;
+      margin-top: -200px;
+      font-size: 0.9em;
+  }
+}
+@media(max-width:800px){ 
+   .sectiones section{
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+  }
+  .sectiones img{
+      margin-left: 0px;
+  } 
+  .sectiones p{
+      display: none;
+  }
+}

@@ -1,0 +1,76 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 4/04/2020, 11:48:11 AM
+    Author     : FELIP
+*/
+body{
+    overflow: scroll;
+}
+   
+.section{
+    width: 90%;
+    margin-left: 5%;
+}
+
+.section section{
+    display: block;
+    margin-bottom: 20px;
+    margin-top: 30px;
+    width: 220px;
+    margin-left:4%;
+    background: linear-gradient(
+        rgba(243, 156, 18,0.3) 40%,
+        rgba(243, 156, 18,0.1) 60%);
+    height: 310px;
+    box-shadow: 6px 6px 15px #666; 
+    border-radius: 5px;
+    z-index: 1;
+    overflow: hidden;
+    cursor: pointer;
+}
+  
+.section section:hover{
+     background: linear-gradient(
+        0deg,
+        rgba(243, 156, 18,0.3) 40%,
+        rgba(243, 156, 18,0.1) 60%); 
+}
+
+.section section img{
+    margin-top: 10px;
+    width: 60%;
+    height: 45%;
+    border-radius: 50%;
+}
+
+.section section div{
+   margin-top: 0px;
+   font-size: 0.7em;
+   width: 220px;
+   height: auto;
+   background-color: transparent;
+} 
+.piechart_3d{
+   margin-top: -200px;
+   width: 100%;
+}
+
+.tableIntDa{
+    margin-top: 100px;
+}
+
+.c{
+    height: 450px;
+    position: relative; 
+    top: -200px;
+}
+
+@media(max-width:1280px){
+          .piechart_3d{
+                overflow: scroll;
+            }
+    }
