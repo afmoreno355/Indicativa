@@ -110,7 +110,7 @@ switch ($accionU){
         $metas->setMeta_nacional(0);
         $metas->setSede($_SESSION['sede']);
         $metas->grabar();
-        print_r("LA META REFERENTE A $nombre FUE AGREGADO");
+        print_r("LA META REFERENTE A $nombre FUE AGREGADO       ");
     break;  
     case 'ENVIAR':
             $indicativa= new Indicativa(null,null);
