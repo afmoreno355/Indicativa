@@ -20,6 +20,10 @@ class Meta {
     private $meta_concertada; 
     private $meta_nacional;
     private $sede;
+    private $pt;
+    private $st;
+    private $tt;
+    private $ct;
     
     function __construct($campo, $valor) {
         if ($campo!=null){
@@ -41,7 +45,43 @@ class Meta {
         $this->meta_concertada=$vector[4];
         $this->meta_nacional=$vector[5];
         $this->sede=$vector[6];
+        $this->pt=$vector[7];
+        $this->st=$vector[8];
+        $this->tt=$vector[9];
+        $this->ct=$vector[10];
     }
+    function getPt() {
+        return $this->pt;
+    }
+
+    function getSt() {
+        return $this->st;
+    }
+
+    function getTt() {
+        return $this->tt;
+    }
+
+    function getCt() {
+        return $this->ct;
+    }
+
+    function setPt($pt){
+        $this->pt = $pt;
+    }
+
+    function setSt($st){
+        $this->st = $st;
+    }
+
+    function setTt($tt){
+        $this->tt = $tt;
+    }
+
+    function setCt($ct){
+        $this->ct = $ct;
+    }
+
     function getSede() {
         return $this->sede;
     }
@@ -116,7 +156,7 @@ class Meta {
         return $lista;
     }
     public function grabar() {
-        $sql="insert into meta(anio,nombre_tipo,aprediz_activo,meta_concertada,meta_nacional, sede) values('$this->anio', '$this->nombre_tipo', $this->aprediz_activo, $this->meta_concertada, $this->meta_nacional, '$this->sede')";
+        $sql="insert into meta values('$this->anio', '$this->nombre_tipo', $this->aprediz_activo, $this->meta_concertada, $this->meta_nacional, '$this->sede', $this->pt, $this->st, $this->tt, $this->ct )";
         ConectorBD::ejecutarQuery($sql, null);
     }
 }
