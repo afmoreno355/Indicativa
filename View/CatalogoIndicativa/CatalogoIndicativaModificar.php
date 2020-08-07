@@ -109,6 +109,10 @@ switch ($accionU){
         $metas->setMeta_concertada($meta);
         $metas->setMeta_nacional(0);
         $metas->setSede($_SESSION['sede']);
+        $metas->setPt($pt);
+        $metas->setSt($st);
+        $metas->setTt($tt);
+        $metas->setCt($ct);
         $metas->grabar();
         print_r("LA META REFERENTE A $nombre FUE AGREGADO       ");
     break;  
