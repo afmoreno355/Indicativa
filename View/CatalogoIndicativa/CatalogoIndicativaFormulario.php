@@ -499,11 +499,13 @@ if($id==1){ ?>
                $integracion=$integracion+$cursos_esp[$k][2]; 
            }   
        } 
-        $valorMeta= ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null);
+       
         $listaD.="<tr>";
         $listaD.="<td style='border: 1px black solid'>{$tipos[$j][0]}</td>";
-        $listaD.="<td style='border: 1px black solid'>$integracionNo</td>";
-        $listaD.="<td style='border: 1px black solid'><input type='number' name='{$tipos[$j][0]}' value='{$valorMeta[0][3]}' onkeyup='llenarForm(this.value, this.name, $integracionNo)' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/><//></td>";
+       $listaD.= (!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null))) ? "<td style='border: 1px black solid' name='{$tipos[$j][0]}' >".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null)[0][2]."</td>" : " <td style='border: 1px black solid' name='{$tipos[$j][0]}'>$integracionNo</td> "; 
+        $listaD.="<td style='border: 1px black solid'><input type='number' ";
+        $listaD.= (!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null))) ? " value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null)[0][3]."'" : " onkeyup='llenarForm(this.value, this.name, $integracionNo)' "; 
+        $listaD.=" name='{$tipos[$j][0]}' id='{$tipos[$j][0]}' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/></td>";
         $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}'></td>";
         $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}'></td>";
         $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}'></td>";
@@ -516,11 +518,12 @@ if($id==1){ ?>
         $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}'></td>";
         $listaD.="</tr>";  
        if($integracion!=0){
-            $valorMeta= ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null);
             $listaD.="<tr>";
             $listaD.="<td style='border: 1px black solid'>{$tipos[$j][0]} CON INTEGRACION</td>";
-            $listaD.="<td style='border: 1px black solid'>$integracion</td>";
-            $listaD.="<td style='border: 1px black solid'><input type='number' value='{$valorMeta[0][3]}' name='{$tipos[$j][0]}INTEGRACION' onkeyup='llenarForm(this.value, this.name, $integracion)' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/></td>";
+            $listaD.=(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null))) ? "<td style='border: 1px black solid' name='{$tipos[$j][0]}INTEGRACION'>".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null)[0][2]."</td>" : " <td style='border: 1px black solid' name='{$tipos[$j][0]}INTEGRACION'>$integracion</td> " ;
+            $listaD.="<td style='border: 1px black solid'><input type='number' ";
+            $listaD.=(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null))) ? "value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null)[0][3]."'" : " onkeyup='llenarForm(this.value, this.name, $integracion)' " ;
+            $listaD.=" name='{$tipos[$j][0]}INTEGRACION' id='{$tipos[$j][0]}INTEGRACION' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/></td>";
             $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}INTEGRACION'></td>";
             $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}INTEGRACION'></td>";
             $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}INTEGRACION'></td>";
