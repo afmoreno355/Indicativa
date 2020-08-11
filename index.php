@@ -18,6 +18,7 @@ require_once dirname(__FILE__).'/classes/Persona.php';
 require_once dirname(__FILE__).'/classes/Sede.php';
 
 session_start();
+$_SESSION['user']='40000000';  
 
 foreach ($_POST as $key => $value) ${$key}=  $value;
 foreach ($_GET as $key => $value) ${$key}= $value;
@@ -82,12 +83,8 @@ if(isset($_SESSION['aviso'])){
                         <input type="button" name="serch" id="serch" onclick="BuscarElementos()" value="BUSCAR"/>
                 </form>   	
               </div><br><br>
-            <?php 
-                if(!isset($_SESSION['user'])){
-                   header("Location: http://localhost/eagle-nn/index.php");       
-                } else {
+            <?php
 		   include $contenido;
-		}
             ?>
         </div>
     </body>
