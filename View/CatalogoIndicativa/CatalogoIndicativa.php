@@ -43,6 +43,7 @@ if(!isset($_SESSION['centroGestion']) || $centroGestion!=''){
 </div>
 
 <script src="./js/indicativa.js"> </script>
+<script src="./js/sede.js"> </script>
  
 <table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;">
      

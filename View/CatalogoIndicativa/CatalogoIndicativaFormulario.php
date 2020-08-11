@@ -161,9 +161,8 @@ if($id==1){ ?>
      $permisos = new Persona(' identificacion ', "'$user'");
 
      $infoCentroConector=ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion from  programas where id_programa='$cod_centro';", 'eagle_admin');
-     $registroCalificado=ConectorBD::ejecutarQuery("select id_sede , lugar_desarrollo.id_resolucion, resoluciones.id_resolucion,fecha_resolucion,denominacion_programa ,modalidad,nivel_programa ,modalidad   from lugar_desarrollo, resoluciones where resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='{$permisos->getidsede()}' and lugar_desarrollo.resuelve='OTORGAMIENTO' and fecha_resolucion::date+'7 year'::interval >= '2020-07-21' and denominacion_programa ='$cod_centro';", 'registro');
-     $pertinencia= ConectorBD::ejecutarQuery("select indice_pertinencia from pertinencia where centro='{$permisos->getidsede()}' and  programa = '$cod_centro' and anio='2019'", null); 
-     //cambiar anio 2019 * $anio y en registro poner fecha actualizada esta fija
+     $registroCalificado=ConectorBD::ejecutarQuery("select id_sede , lugar_desarrollo.id_resolucion, resoluciones.id_resolucion,fecha_resolucion,denominacion_programa ,modalidad,nivel_programa ,modalidad   from lugar_desarrollo, resoluciones where resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='{$permisos->getidsede()}' and lugar_desarrollo.resuelve='OTORGAMIENTO' and fecha_resolucion::date+'7 year'::interval >= 'now()' and denominacion_programa ='$cod_centro';", 'registro');
+     $pertinencia= ConectorBD::ejecutarQuery("select indice_pertinencia from pertinencia where centro='{$permisos->getidsede()}' and  programa = '$cod_centro' and anio='$anio'", null); 
      
      if(!empty($infoCentroConector)){
         if((empty($registroCalificado) && ($infoCentroConector[0][2]=='TECNOLOGIA' || $infoCentroConector[0][2]=='ESPECIALIZACION TECNOLOGICA' ))){
@@ -499,11 +498,13 @@ if($id==1){ ?>
                $integracion=$integracion+$cursos_esp[$k][2]; 
            }   
        } 
-        $valorMeta= ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null);
+       
         $listaD.="<tr>";
         $listaD.="<td style='border: 1px black solid'>{$tipos[$j][0]}</td>";
-        $listaD.="<td style='border: 1px black solid'>$integracionNo</td>";
-        $listaD.="<td style='border: 1px black solid'><input type='number' name='{$tipos[$j][0]}' value='{$valorMeta[0][3]}' onkeyup='llenarForm(this.value, this.name, $integracionNo)' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/><//></td>";
+       $listaD.= (!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null))) ? "<td style='border: 1px black solid' name='{$tipos[$j][0]}' >".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null)[0][2]."</td>" : " <td style='border: 1px black solid' name='{$tipos[$j][0]}'>$integracionNo</td> "; 
+        $listaD.="<td style='border: 1px black solid'><input type='number' ";
+        $listaD.= (!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null))) ? " value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}' and sede='$centroGestion' ", null)[0][3]."'" : " onkeyup='llenarForm(this.value, this.name, $integracionNo)' "; 
+        $listaD.=" name='{$tipos[$j][0]}' id='{$tipos[$j][0]}' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/></td>";
         $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}'></td>";
         $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}'></td>";
         $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}'></td>";
@@ -516,11 +517,12 @@ if($id==1){ ?>
         $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}'></td>";
         $listaD.="</tr>";  
        if($integracion!=0){
-            $valorMeta= ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null);
             $listaD.="<tr>";
             $listaD.="<td style='border: 1px black solid'>{$tipos[$j][0]} CON INTEGRACION</td>";
-            $listaD.="<td style='border: 1px black solid'>$integracion</td>";
-            $listaD.="<td style='border: 1px black solid'><input type='number' value='{$valorMeta[0][3]}' name='{$tipos[$j][0]}INTEGRACION' onkeyup='llenarForm(this.value, this.name, $integracion)' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/></td>";
+            $listaD.=(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null))) ? "<td style='border: 1px black solid' name='{$tipos[$j][0]}INTEGRACION'>".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null)[0][2]."</td>" : " <td style='border: 1px black solid' name='{$tipos[$j][0]}INTEGRACION'>$integracion</td> " ;
+            $listaD.="<td style='border: 1px black solid'><input type='number' ";
+            $listaD.=(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null))) ? "value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='{$tipos[$j][0]}INTEGRACION' and sede='$centroGestion' ", null)[0][3]."'" : " onkeyup='llenarForm(this.value, this.name, $integracion)' " ;
+            $listaD.=" name='{$tipos[$j][0]}INTEGRACION' id='{$tipos[$j][0]}INTEGRACION' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/></td>";
             $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}INTEGRACION'></td>";
             $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}INTEGRACION'></td>";
             $listaD.="<td style='border: 1px black solid' class='{$tipos[$j][0]}INTEGRACION'></td>";
@@ -571,8 +573,8 @@ if($id==1){ ?>
                 <tr style='background: rgb(52, 152, 219)'>
                     <td> NIVEL</td>
                     <td> CUPOS PASAN</td>
-                    <td> METAS CONCERTADAS</td>  
-                    <td> CONCERTACIÓN DE METAS</td>
+                    <td> META ASIGNADA</td>  
+                    <td> META A PROGRAMAR</td>
                     <td> PRIMER TRIM. (60%)</td>
                     <td> SEGUNDO TRIM. (10%)</td>
                     <td> TERCER TRIM. (20%)</td>

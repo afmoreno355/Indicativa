@@ -103,10 +103,13 @@ for ($i = 0; $i < count($datos); $i++) {
         <th class="noDisplay">Programa Fic</th>
         <th>Estado</th>
         <th>
-            <?PHP if($persona!='AI' && $persona[0][0]!='SA' && $persona[0][0]!='IR' ){?><pre><input type='button' id='button' name='2' title='Adicionar' value='ADICIONAR' onclick="validarDatos('','user=<?=$user?>&id=1&accion=ADICIONAR&info=','modalVentana','View/CatalogoIndicativa/CatalogoIndicativaFormulario.php')"/></pre><?PHP } ?>
-            <pre><input type='button' id='button' name='2' title='Exportar' value='EXPORTAR' onclick="Exportar('','user=<?=$user?>&id=7&centroGestion=<?=$centroGestion?>','tablareporte','View/CatalogoIndicativa/CatalogoIndicativaFormulario.php')"/></pre>
-            </th><th><pre><input type='button' id='button' name='2' title='Diagrama Catalogo Vigencia' value='GRAFICAS' onclick="reportes('<?=$user?>','<?=$centroGestion?>')"/></pre>
-            <pre><input type='button' id='button' name='2' title='Pe-04' value='PE-04' onclick="validarDatos('','user=<?=$user?>&id=8&centroGestion=<?=$centroGestion?>','modalVentana','View/CatalogoIndicativa/CatalogoIndicativaFormulario.php')"/></pre>
+            <pre><input type='button' id='button' name='2' title='Analisis Pe-04' value='PE-04' onclick="validarDatos('','user=<?=$user?>&id=8&centroGestion=<?=$centroGestion?>','modalVentana','View/CatalogoIndicativa/CatalogoIndicativaFormulario.php')"/></pre>
+            <?php if($persona!='AI' && $persona[0][0]!='SA' && $persona[0][0]!='IR' ){ if(count(ConectorBD::ejecutarQuery("select * from meta where anio='".($date+1)."'  and sede='$centroGestion' ", null))>=6) { ?><pre><input type='button' id='button' name='2' title='Adicionar Nuevo Registro de Catalogo al Sistema' value='ADICIONAR' onclick="validarDatos('','user=<?=$user?>&id=1&accion=ADICIONAR&info=','modalVentana','View/CatalogoIndicativa/CatalogoIndicativaFormulario.php')"/></pre> 
+            <pre><input type='button' id='button' name='2' title='Importar Excel Catalogo al Sistema' value='IMPORTAR' onclick="validarDatos('','accion=IMPORTAR&id=6','modalVentana','View/Sede/SedeFormulario.php')"/></pre><?php } }?>
+            </th>
+            <th><pre> <input type='button' id='button' name='2' title='Exportar Archivo Plano de Excel' value='EXPORTAR' onclick="Exportar('','user=<?=$user?>&id=7&centroGestion=<?=$centroGestion?>','tablareporte','View/CatalogoIndicativa/CatalogoIndicativaFormulario.php')"/></pre>
+            <pre> <input type='button' id='button' name='2' title='Diagrama Catalogo Vigencias' value='GRAFICAS' onclick="reportes('<?=$user?>','<?=$centroGestion?>')"/></pre>
+          
             <input type='hidden' id='numeroPaginas' value="<?=$numeroPaginas?>">
             <input type='hidden' id='user' value="<?=$user?>">
             <input type='hidden' id='bucarPalabraClave' value="<?=$bucarPalabraClave?>">
