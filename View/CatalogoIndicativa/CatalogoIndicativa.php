@@ -5,18 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-$permisos = new Persona(' identificacion ', "'".$_SESSION['user']."'");
+    $sede='centro de produccion limpia lope';
+    $centroGestion='9836';
 
-if($permisos->getIdTipo()!='SA' && $permisos->getIdTipo()!='A' && $permisos->getIdTipo()!='AI' && $permisos->getIdTipo()!='GI' && $permisos->getIdTipo()!='IR'){   
-        header("location: http://localhost/Eagle-nn/inicio.php?CONTENIDO=View/Usuario/Usuario.php");
-}
-$sede=($centroGestion!='') ? ConectorBD::ejecutarQuery("select nombresede from sede where codigosede='$centroGestion'", 'eagle_admin')[0][0] : ConectorBD::ejecutarQuery("select nombresede from sede where codigosede='{$permisos->getidsede()}'", 'eagle_admin')[0][0] ;
-
-if(!isset($_SESSION['centroGestion']) || $centroGestion!=''){
-    $_SESSION['centroGestion']=$centroGestion;
-}else{
-    $centroGestion=$_SESSION['centroGestion'];
-}
 
 ?>
 <div class="tituloDonde">
@@ -43,6 +34,7 @@ if(!isset($_SESSION['centroGestion']) || $centroGestion!=''){
 </div>
 
 <script src="./js/indicativa.js"> </script>
+<script src="./js/sede.js"> </script>
  
 <table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;">
      
