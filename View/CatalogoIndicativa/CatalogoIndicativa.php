@@ -6,6 +6,7 @@
  * and open the template in the editor.
  */
 $permisos = new Persona(' identificacion ', "'".$_SESSION['user']."'");
+print_r($permisos);
 
 if($permisos->getIdTipo()!='SA' && $permisos->getIdTipo()!='A' && $permisos->getIdTipo()!='AI' && $permisos->getIdTipo()!='GI' && $permisos->getIdTipo()!='IR'){   
         header("location: http://localhost/Eagle-nn/inicio.php?CONTENIDO=View/Usuario/Usuario.php");
