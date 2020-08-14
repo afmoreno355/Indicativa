@@ -12,6 +12,7 @@ date_default_timezone_set('America/Bogota');
 $date= date('Y', time());
 
 $filtro="";
+$idsProgramas;
 
 require_once dirname(__FILE__)."/../../classes/ConectorBD.php";
 require_once dirname(__FILE__)."/../../classes/Indicativa.php";
@@ -19,6 +20,12 @@ require_once dirname(__FILE__)."/../../classes/Indicativa.php";
 foreach ($_POST as $key => $value) ${$key}=$value;
 
 $persona= ConectorBD::ejecutarQuery("select idtipo, idsede from persona where identificacion='$user'", 'eagle_admin');
+// selecccion id del programa 
+if(!empty($tipoFormacion)){
+   $idsProgramas= ConectorBD::ejecutarQuery("select id_programa from public.programas where nivel_formacion like '%$tipoFormacion%'", 'eagle_admin');
+}
+
+
 
 if($persona[0][0]!='SA' && $persona[0][0]!='AI' && $persona[0][0]!='IR'){
     $filtro.=" cod_centro='{$persona[0][1]}' and vigencia='".($date+1)."'";
@@ -28,11 +35,23 @@ if($persona[0][0]!='SA' && $persona[0][0]!='AI' && $persona[0][0]!='IR'){
 }elseif($persona[0][0]=='AI' || $persona[0][0]!='IR') {
      $filtro.=" cod_centro='$centroGestion' and validar='E' and vigencia='".($date+1)."'";
 }
+
 if($bucarPalabraClave!=''){
     if($filtro!=''){
         $filtro.='  and  ';
     }
     $filtro.=" (id_programa like '%". strtoupper($bucarPalabraClave)."%')";
+}
+
+if(!empty($tipoFormacion)){
+   $filtro.=" and id_programa in ";
+   for ($i = 0; $i < count($idsProgramas); $i++) {
+      if( $i == 0 ) $filtro.="('".$idsProgramas[$i][0]."'";
+      else if( $i == count($idsProgramas) - 1 ) $filtro.=",'".$idsProgramas[$i][0]."')";
+      else $filtro.=",'".$idsProgramas[$i][0]."'";
+  }
+  //echo $filtro;
+  //echo count($idsProgramas);
 }
 
 $datos= Indicativa::datosobjetos($filtro, $pagina, 5);

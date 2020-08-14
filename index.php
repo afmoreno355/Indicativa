@@ -16,8 +16,14 @@ require_once dirname(__FILE__).'/classes/ConectorBD.php';
 require_once dirname(__FILE__).'/classes/Indicativa.php';
 require_once dirname(__FILE__).'/classes/Persona.php';
 require_once dirname(__FILE__).'/classes/Sede.php';
+require_once dirname(__FILE__).'/classes/Programa.php';
 
 session_start();
+
+$persona= ConectorBD::ejecutarQuery("select identificacion, idsede from persona where identificacion='40000000'", 'eagle_admin');
+
+$_SESSION['sede']=$persona[0][1];
+$_SESSION['user']=$persona[0][0];
 
 foreach ($_POST as $key => $value) ${$key}=  $value;
 foreach ($_GET as $key => $value) ${$key}= $value;
@@ -43,6 +49,7 @@ if(isset($_SESSION['aviso'])){
         <link rel="stylesheet" href="css/buscar.css">
         <link rel="stylesheet" href="css/modal.css">
         <link rel="stylesheet" href="css/menu.css">
+        <link rel="stylesheet" href="css/tabs.css">
         <link rel="icon" type="image/png" href="img/logo/sena.png" />  
       	<title>INDICATIVA</title>        
         <meta charset="UTF-8">
@@ -84,7 +91,7 @@ if(isset($_SESSION['aviso'])){
               </div><br><br>
             <?php 
                 if(!isset($_SESSION['user'])){
-                   header("Location: http://localhost/eagle-nn/index.php");       
+                   //header("Location: http://localhost/eagle-nn/index.php");       
                 } else {
 		   include $contenido;
 		}
