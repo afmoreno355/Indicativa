@@ -92,4 +92,3 @@ if(isset($_SESSION['aviso'])){
         </div>
     </body>
     <script src="js/menu.js"> </script>
-   
