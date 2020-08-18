@@ -32,6 +32,12 @@ if($permisos->getIdTipo()!='SA' && $permisos->getIdTipo()!='A' && $permisos->get
 
 <div id="piechart_3d" class="tableIntD piechart_3d" style="margin-top: 50px;  margin-left: 5%; width: 90%;"></div>
 
+<div style="width: 100%; text-align: center; align-content: center">
+    <pre>
+        <input type="radio" value='1' onclick="meses(this.value, document.getElementById('bucarPalabraClave').value)" name="meses" checked/> Mes     <input type="radio" value='3' onclick="meses(this.value, document.getElementById('bucarPalabraClave').value)" name="meses"/> Trimestral    <input type="radio" value='6' onclick="meses(this.value, document.getElementById('bucarPalabraClave').value)" name="meses"/> Semestral
+    </pre>  
+</div>
+
 <table class="tableIntT c" style="display: none">   
       <tr>
         <td  colspan="3" class="noHover">
@@ -52,6 +58,6 @@ if($permisos->getIdTipo()!='SA' && $permisos->getIdTipo()!='A' && $permisos->get
  
 <script>
 
-window.addEventListener('load',idexistentesGraficas('','bd=<?=$_SESSION['bd']?>&centroGestion=<?=$centroGestion?>','tableIntT','View/Reporte/ReporteTabla.php'));
+window.addEventListener('load',idexistentesGraficas('','id=1&centroGestion=<?=$centroGestion?>','tableIntT','View/Reporte/ReporteTabla.php'));
 
 </script>
