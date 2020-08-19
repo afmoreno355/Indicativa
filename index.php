@@ -16,6 +16,7 @@ require_once dirname(__FILE__).'/classes/ConectorBD.php';
 require_once dirname(__FILE__).'/classes/Indicativa.php';
 require_once dirname(__FILE__).'/classes/Persona.php';
 require_once dirname(__FILE__).'/classes/Sede.php';
+require_once dirname(__FILE__).'/classes/Programa.php';
 
 session_start();
 
@@ -43,6 +44,7 @@ if(isset($_SESSION['aviso'])){
         <link rel="stylesheet" href="css/buscar.css">
         <link rel="stylesheet" href="css/modal.css">
         <link rel="stylesheet" href="css/menu.css">
+        <link rel="stylesheet" href="css/tabs.css">
         <link rel="icon" type="image/png" href="img/logo/sena.png" />  
       	<title>INDICATIVA</title>        
         <meta charset="UTF-8">
@@ -86,8 +88,8 @@ if(isset($_SESSION['aviso'])){
                 if(!isset($_SESSION['user'])){
                    header("Location: http://localhost/eagle-nn/index.php");       
                 } else {
-		   include $contenido;
-		}
+                    include $contenido;
+                }
             ?>
         </div>
     </body>
