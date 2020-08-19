@@ -124,4 +124,5 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
         evt.currentTarget.className += " active";
     };
 
+
 </script>
