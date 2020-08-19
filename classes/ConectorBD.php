@@ -59,7 +59,7 @@ class ConectorBD {
         $conector->conectar($bd);
         $sentencia=$conector->conexion->prepare($cadenaSQL);
         if (!$sentencia->execute()){ //si hay error en el SQL devuelve falso
-   //echo "Error al ejecutar en $bd: $cadenaSQL. ";
+   echo "Error al ejecutar en $bd: $cadenaSQL. ";
             $conector->desconectar();
             return(false);
         } else {

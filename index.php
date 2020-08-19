@@ -34,6 +34,7 @@ if(isset($_SESSION['aviso'])){
         $_SESSION['aviso']='';
     } 
 }   
+
 ?>
 
  <head>
