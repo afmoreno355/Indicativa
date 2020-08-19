@@ -20,6 +20,10 @@ require_once dirname(__FILE__).'/classes/Programa.php';
 
 session_start();
 
+$persona= ConectorBD::ejecutarQuery("select identificacion, idsede from persona where identificacion='40000000'", 'eagle_admin');
+
+$_SESSION['sede']=$persona[0][1];
+$_SESSION['user']=$persona[0][0];
 
 foreach ($_POST as $key => $value) ${$key}=  $value;
 foreach ($_GET as $key => $value) ${$key}= $value;
@@ -87,10 +91,10 @@ if(isset($_SESSION['aviso'])){
               </div><br><br>
             <?php 
                 if(!isset($_SESSION['user'])){
-                   //header("Location: http://localhost/eagle-nn/index.php");       
+                   header("Location: http://localhost/eagle-nn/index.php");       
                 } else {
-		   include $contenido;
-		}
+                    include $contenido;
+                }
             ?>
         </div>
     </body>
