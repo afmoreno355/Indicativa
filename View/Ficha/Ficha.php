@@ -12,10 +12,7 @@ if($permisos[0][0]!='A' && $permisos[0][0]!='GI'){
 }
 ?>
 <style>
-    .menu{
-        display: none;
-    }
-    .buscar{
+    .navDisplay{
         display: none;
     }
 </style>
@@ -24,6 +21,15 @@ if($permisos[0][0]!='A' && $permisos[0][0]!='GI'){
    <label>Ficha :: Fichas Tablas </label> 
 </div>
 
+<table class="tableIntT c">   
+      <tr>
+        <td  colspan="3" class="noHover">
+            <button class="fas fa-angle-double-left" name="Atras" id="Atras" title="Pag Atras" onclick="AtrasC('','user=<?=$_SESSION['user']?>&centroGestion='+document.getElementById('centroGestion').value,'tableIntT','View/Ficha/FichaTabla.php');"></button>
+            <label class="pag" name="pag" id="pag">1</label>
+            <button class="fas fa-angle-double-right" name="Adelante" id="Adelante" title="Pag Adelante" onclick="AdelanteC('', document.getElementById('numeroPaginas').value,'user=<?=$_SESSION['user']?>&centroGestion='+document.getElementById('centroGestion').value,'tableIntT','View/Ficha/FichaTabla.php');"></button>
+        </td>  
+      </tr>       
+</table>
 
 <table id="tableIntT" class="tableIntT sombra tableIntTa">
     
@@ -34,6 +40,7 @@ if($permisos[0][0]!='A' && $permisos[0][0]!='GI'){
 </div>
 
 <script src="./js/ficha.js"> </script>
+<script src="./js/indicativa.js"> </script>
  
 <table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;">
      
@@ -41,6 +48,6 @@ if($permisos[0][0]!='A' && $permisos[0][0]!='GI'){
 
 <script>
 
-window.addEventListener('load',idexistentesF('','FichaGestiones=<?=$FichaGestiones?>','tableIntT','View/Ficha/FichaTabla.php'));
+window.addEventListener('load',idexistentesF('','pagina=0&centroGestion=<?=$FichaGestiones?>','tableIntT','View/Ficha/FichaTabla.php'));
 
 </script>

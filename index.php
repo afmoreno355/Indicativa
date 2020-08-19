@@ -16,9 +16,9 @@ require_once dirname(__FILE__).'/classes/ConectorBD.php';
 require_once dirname(__FILE__).'/classes/Indicativa.php';
 require_once dirname(__FILE__).'/classes/Persona.php';
 require_once dirname(__FILE__).'/classes/Sede.php';
+require_once dirname(__FILE__).'/classes/Programa.php';
 
 session_start();
-$_SESSION['user']='40000000';  
 
 foreach ($_POST as $key => $value) ${$key}=  $value;
 foreach ($_GET as $key => $value) ${$key}= $value;
@@ -44,6 +44,7 @@ if(isset($_SESSION['aviso'])){
         <link rel="stylesheet" href="css/buscar.css">
         <link rel="stylesheet" href="css/modal.css">
         <link rel="stylesheet" href="css/menu.css">
+        <link rel="stylesheet" href="css/tabs.css">
         <link rel="icon" type="image/png" href="img/logo/sena.png" />  
       	<title>INDICATIVA</title>        
         <meta charset="UTF-8">
@@ -83,10 +84,13 @@ if(isset($_SESSION['aviso'])){
                         <input type="button" name="serch" id="serch" onclick="BuscarElementos()" value="BUSCAR"/>
                 </form>   	
               </div><br><br>
-            <?php
+            <?php 
+                if(!isset($_SESSION['user'])){
+                   header("Location: http://localhost/eagle-nn/index.php");       
+                } else {
 		   include $contenido;
+		}
             ?>
         </div>
     </body>
     <script src="js/menu.js"> </script>
-   

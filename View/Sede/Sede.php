@@ -5,8 +5,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-  
- header("location: index.php?CONTENIDO=View/CatalogoIndicativa/CatalogoIndicativa.php");
+
+//primera capa 
+//permisos del usuario si puede o no estar en esta file
+$permisos = new Persona(' identificacion ', "'".$_SESSION['user']."'");
+//fin permisos
+//redireccion si no existen permisos
+if($permisos->getIdTipo()!='SA' && $permisos->getIdTipo()!='AI' && $permisos->getIdTipo()!='IR'){   
+          header("location: index.php?CONTENIDO=View/CatalogoIndicativa/CatalogoIndicativa.php");
+}
 //fin redireccion
 ?>
 <!--titulo-->
