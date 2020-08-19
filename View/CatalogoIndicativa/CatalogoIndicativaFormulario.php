@@ -161,9 +161,8 @@ if($id==1){ ?>
      $permisos = new Persona(' identificacion ', "'$user'");
 
      $infoCentroConector=ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion from  programas where id_programa='$cod_centro';", 'eagle_admin');
-     $registroCalificado=ConectorBD::ejecutarQuery("select id_sede , lugar_desarrollo.id_resolucion, resoluciones.id_resolucion,fecha_resolucion,denominacion_programa ,modalidad,nivel_programa ,modalidad   from lugar_desarrollo, resoluciones where resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='{$permisos->getidsede()}' and lugar_desarrollo.resuelve='OTORGAMIENTO' and fecha_resolucion::date+'7 year'::interval >= '2020-07-21' and denominacion_programa ='$cod_centro';", 'registro');
-     $pertinencia= ConectorBD::ejecutarQuery("select indice_pertinencia from pertinencia where centro='{$permisos->getidsede()}' and  programa = '$cod_centro' and anio='2019'", null); 
-     //cambiar anio 2019 * $anio y en registro poner fecha actualizada esta fija
+     $registroCalificado=ConectorBD::ejecutarQuery("select id_sede , lugar_desarrollo.id_resolucion, resoluciones.id_resolucion,fecha_resolucion,denominacion_programa ,modalidad,nivel_programa ,modalidad   from lugar_desarrollo, resoluciones where resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='{$permisos->getidsede()}' and lugar_desarrollo.resuelve='OTORGAMIENTO' and fecha_resolucion::date+'7 year'::interval >= 'now()' and denominacion_programa ='$cod_centro';", 'registro');
+     $pertinencia= ConectorBD::ejecutarQuery("select indice_pertinencia from pertinencia where centro='{$permisos->getidsede()}' and  programa = '$cod_centro' and anio='$anio'", null); 
      
      if(!empty($infoCentroConector)){
         if((empty($registroCalificado) && ($infoCentroConector[0][2]=='TECNOLOGIA' || $infoCentroConector[0][2]=='ESPECIALIZACION TECNOLOGICA' ))){
@@ -574,8 +573,8 @@ if($id==1){ ?>
                 <tr style='background: rgb(52, 152, 219)'>
                     <td> NIVEL</td>
                     <td> CUPOS PASAN</td>
-                    <td> METAS CONCERTADAS</td>  
-                    <td> CONCERTACIÓN DE METAS</td>
+                    <td> META ASIGNADA</td>  
+                    <td> META A PROGRAMAR</td>
                     <td> PRIMER TRIM. (60%)</td>
                     <td> SEGUNDO TRIM. (10%)</td>
                     <td> TERCER TRIM. (20%)</td>

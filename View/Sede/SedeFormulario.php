@@ -156,6 +156,34 @@ if($id==2){ ?>
    						</td>
    					</tr>
    				</table>
+<?PHP }elseif($id==6){ ?>
+<!--tercer capa-->
+<!--contruccion de ventanas modales-->
+   <label id='modalesT' class='modalesT'>SUBIR ARCHIVO PLANO EXCEL</label><br><br>   				
+   				<table>
+   					<tr>
+   						<td>
+   						       <label id='aviso'></label>  				
+ 						</td>
+   					</tr>
+   					<tr>
+   						<td>
+   							<label> Archivo Excel</label><br>
+                                                        <img src='img/defecto/Excel.png' style='width: 200px; height: 200px'>
+   						</td>
+   					</tr>
+   					<tr>
+   						<td>
+   							<label> Archivo Nuevo </label><br>
+                                                        <input type='file' name ='Excel' value="" id="Excel" required /><br><br>
+   						</td>
+   					</tr>
+   					<tr>
+   						<td>
+                                                        <input type='button' name ='accionU' id='accionU' value='IMPORTAR' onclick="pe04('index.php?CONTENIDO=View/IndicativaExcel/IndicativaExcel.php')"/>
+   						</td>
+   					</tr>
+   				</table>
 <?PHP }elseif (isset($id)) { 
      $primerCortar= explode('¬', $cadena); 
     for ($i = 0; $i < count($primerCortar)-1; $i++) {

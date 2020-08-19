@@ -50,7 +50,7 @@ switch ($accionU){
         header("location: index.php?CONTENIDO=View/Sede/Sede.php");
         ob_end_flush();
     break;    
-     case 'PERTINENCIA':
+    case 'PERTINENCIA':
        
         $nuevoNombre= explode('.', $_FILES['Excel']['name']);
         copy($_FILES['Excel']['tmp_name'], "/wamp64/www/eagle-IN/Archivos/".$date."PERTINENCIA.".$nuevoNombre[1]);
@@ -62,15 +62,22 @@ switch ($accionU){
              $objPHPExcel->getActiveSheetIndex(0);  
              $numeroFilas= $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
              for ($i = 0; $i < count($numeroFilas); $i++) {
-
-                
+             //VALIDAR POR AÑO     
                 $nombreExp= round($objPHPExcel->getActiveSheet()->getCell('Q'.$i)->getCalculatedValue()*100);
                 
-                 if(is_numeric($objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()) && is_numeric($objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue()) && is_numeric($objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue()) && is_numeric($objPHPExcel->getActiveSheet()->getCell('K'.$i)->getCalculatedValue()) && is_numeric($nombreExp)){
-                     ConectorBD::ejecutarQuery("insert into pertinencia(anio, centro, programa, egresados, indice_pertinencia) values('{$objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()}',"
-                     . "'{$objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue()}','{$objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue()}',{$objPHPExcel->getActiveSheet()->getCell('K'.$i)->getCalculatedValue()},"
-                     . "$nombreExp)", null);
-                 }
+                if(  is_numeric($objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()) && strlen($objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue())==4  ){
+                    if(  is_numeric($objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue()) && strlen($objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue())==4  ){
+                        if(  is_numeric($objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue()) && strlen($objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue())<8 /*&& !empty(ConectorBD::ejecutarQuery("select * from programas where id_programa='".$objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue()."'", "eagle_admin"))*/  ){
+                            if(  is_numeric($objPHPExcel->getActiveSheet()->getCell('K'.$i)->getCalculatedValue())  ){
+                                if(  is_numeric($objPHPExcel->getActiveSheet()->getCell('Q'.$i)->getCalculatedValue())  ){
+                                    ConectorBD::ejecutarQuery("insert into pertinencia(anio, centro, programa, egresados, indice_pertinencia) values('{$objPHPExcel->getActiveSheet()->getCell('A'.$i)->getCalculatedValue()}',"
+                                    . "'{$objPHPExcel->getActiveSheet()->getCell('D'.$i)->getCalculatedValue()}','{$objPHPExcel->getActiveSheet()->getCell('G'.$i)->getCalculatedValue()}',{$objPHPExcel->getActiveSheet()->getCell('K'.$i)->getCalculatedValue()},"
+                                    . "$nombreExp)", null);
+                                }
+                            }                                 
+                        }                       
+                    }                     
+                }
              }
                
         unlink("C:/wamp64/www/eagle-IN/Archivos/".$date."PERTINENCIA.".$nuevoNombre[1]) ;        

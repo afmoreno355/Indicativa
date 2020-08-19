@@ -9,7 +9,7 @@
 /**
  * Description of Indicativa
  *
- * @author FELIP
+ * @author FELIPE
  */
 class Indicativa {
    private $id_indicativa;
@@ -268,15 +268,13 @@ class Indicativa {
     }
     
     public static function listaprogramas($centro){
-        date_default_timezone_set('America/Bogota');
-        $date= date('Y-m-d', time());
         $lista="";
-        $tecnologos= ConectorBD::ejecutarQuery("select denominacion_programa from lugar_desarrollo, resoluciones where resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='$centro' and lugar_desarrollo.resuelve='OTORGAMIENTO' and fecha_resolucion::date+'7 year'::interval >= '$date'  group by denominacion_programa;", 'registro');
+        $tecnologos= ConectorBD::ejecutarQuery("select denominacion_programa from lugar_desarrollo, resoluciones where resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='$centro' and lugar_desarrollo.resuelve='OTORGAMIENTO' and fecha_resolucion::date+'7 year'::interval >= 'now()'  group by denominacion_programa;", 'registro');
         for ($j = 0; $j < count($tecnologos); $j++) {
             $listaSi= ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion from  programas where id_programa='{$tecnologos[$j][0]}'", 'eagle_admin');
             $lista.="<option value='{$listaSi[0][0]}'> {$listaSi[0][1]} {$listaSi[0][2]}</option>";
         }
-        $si= ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion from  programas where nivel_formacion<>'TECNOLOGIA'", 'eagle_admin');
+        $si= ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion from  programas where nivel_formacion<>'TECNOLOGIA' and nivel_formacion<>'ESPECIALIZACION TECNOLOGICA'", 'eagle_admin');
         for ($i = 0; $i < count($si); $i++) {
             $lista.="<option value='{$si[$i][0]}'> {$si[$i][1]} {$si[$i][2]}</option>";
         }
@@ -369,4 +367,19 @@ class Indicativa {
     ConectorBD::ejecutarQuery($sql, null);
     }
     
+    public static function encryptIt($q) {
+        $qEncoded  = base64_encode($q);
+        return( $qEncoded );
+    }
+    
+    public static function decryptIt($q) {
+        $qDecoded = base64_decode($q);
+        $nuevoArray=[];
+        $cortarCadena= explode('&', $qDecoded);
+        for ($i = 0; $i < count($cortarCadena); $i++) {
+            list($nombre, $valor)= explode("=", $cortarCadena[$i]);
+            $nuevoArray += [$nombre => $valor];        
+        }
+        return $nuevoArray;
+    }
 }

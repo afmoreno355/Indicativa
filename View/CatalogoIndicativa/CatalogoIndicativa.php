@@ -3,7 +3,7 @@
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * and open the template in the editor sin el FELIPE.
  */
 $permisos = new Persona(' identificacion ', "'".$_SESSION['user']."'");
 
@@ -38,7 +38,6 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
     </div>
 
     <div id="titulada" class="tabcontent" style="display: block;">
-
         <div style="margin-top:15px;margin-bottom:15px">
             Tipo de Formación
             <select onchange="cargarTablaIndicadores()" class="content_largo" name="id_formacion" id="id_formacion" required="">
@@ -61,8 +60,6 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
 
         <div id="formDetalle" style="display: none;"></div>
         
-        <script src="./js/indicativa.js"> </script>
-        
         <table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;"></table>
     </div>
 
@@ -71,6 +68,12 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
         <p>Paris is the capital of France.</p> 
     </div>
 </div>
+
+
+<script src="./js/indicativa.js"> </script>
+<script src="./js/sede.js"> </script>
+ 
+<table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;"></table>
 
 <script>
 

@@ -5,6 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -13,12 +14,18 @@ require_once dirname(__FILE__)."/../../Librerias/src/PHPMailer.php";
 require_once dirname(__FILE__)."/../../Librerias/src/SMTP.php";
 require_once dirname(__FILE__)."/../../classes/Meta.php";
 require_once dirname(__FILE__).'/../../classes/ConectorBD.php';
+require_once dirname(__FILE__).'/../../classes/Indicativa.php';
 
 foreach ($_POST as $key => $value) ${$key}=  $value;
 
 date_default_timezone_set('America/Bogota');
 $dateIndicativa= date('Y', time());
 
+if(isset($cadenaValorNuevo)){
+    session_start() ;
+    $nuevo_POST = Indicativa::decryptIt($cadenaValorNuevo);
+    foreach ($nuevo_POST as $key => $value) ${$key}=  $value;
+}
 switch ($accionU){
     case 'ADICIONAR':
             $indicativa= new Indicativa(null,null);
@@ -41,8 +48,8 @@ switch ($accionU){
             $indicativa->setAnio_termina($anio_termina);
             $indicativa->setCurso($curso);
             $indicativa->setAmbiente_requiere($ambiente_requiere);
-            $indicativa->setGira_tecnica($gira_tecnica);
-            $indicativa->setPrograma_fic($programa_fic);
+            $indicativa->setGira_tecnica(strtolower($gira_tecnica));
+            $indicativa->setPrograma_fic(strtolower($programa_fic));
             $indicativa->setId_modalidad($id_modalidad);
             $indicativa->setFormacion($formacion);
             $indicativa->setIdentificacion($_SESSION['user']);
@@ -80,8 +87,8 @@ switch ($accionU){
             $indicativa->setAnio_termina($anio_termina);
             $indicativa->setCurso($curso);
             $indicativa->setAmbiente_requiere($ambiente_requiere);
-            $indicativa->setGira_tecnica($gira_tecnica);
-            $indicativa->setPrograma_fic($programa_fic);
+            $indicativa->setGira_tecnica(strtolower($gira_tecnica));
+            $indicativa->setPrograma_fic(strtolower($programa_fic));
             $indicativa->setId_modalidad($id_modalidad);
             $indicativa->setFormacion($formacion);
             $indicativa->setIdentificacion($_SESSION['user']);
@@ -162,5 +169,8 @@ switch ($accionU){
         echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
     } 
     header("location: index.php?CONTENIDO=View/CatalogoIndicativa/CatalogoIndicativa.php");
-    break;    
+    break; 
 }
+?>
+
+
