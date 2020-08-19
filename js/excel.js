@@ -1,12 +1,1 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-function reloadPadre(){
-   window.setTimeout( () => {
-       window.opener.location.reload(); 
-   },1000); 
-}
+var _0x6b00=["\x72\x65\x6C\x6F\x61\x64","\x6C\x6F\x63\x61\x74\x69\x6F\x6E","\x6F\x70\x65\x6E\x65\x72","\x73\x65\x74\x54\x69\x6D\x65\x6F\x75\x74"];function reloadPadre(){window[_0x6b00[3]](()=>{window[_0x6b00[2]][_0x6b00[1]][_0x6b00[0]]()},1000)}
