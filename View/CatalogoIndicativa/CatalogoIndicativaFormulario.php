@@ -23,6 +23,9 @@ $jornada1=0;
 $jornada2=0;
 $jornada3=0;
 $jornada4=0;
+$cupo1='';
+$cupo2='';
+$cupo3='';
 $inicio='';
 
 date_default_timezone_set("America/Bogota");
@@ -108,7 +111,12 @@ if($id==1){ ?>
                                                            <option value="ESPECIAL EMPRESARIAL" <?=$formacionT2?>>ESPECIAL EMPRESARIAL</option>
                                                            <option value="ESPECIAL SOCIAL" <?=$formacionT3?>>ESPECIAL SOCIAL</option>
                                                </select></pre></div>
-                <div><pre>Cupos*               <input class="content_largo" type="text" class="cupos" name='cupos' id="cupos" value='<?=$datos->getCupos()?>' required /></pre></div>
+                <div><pre>Cupos*               <select class="content_largo" class="cupos" name='cupos' id="cupos" value='<?php if($datos->getCupos()==25){$cupo1='selected';}elseif($datos->getCupos()==30){$cupo2='selected';}elseif($datos->getCupos()==50){$cupo3='selected';}?>' required >
+                                                            <option value="">CUPOS</option>
+                                                            <option value="25" <?=$cupo1?> >25</option>
+                                                            <option value="30" <?=$cupo2?> >30</option>
+                                                            <option value="50" <?=$cupo3?> >50 Solo Virtual</option>
+                                               </select></pre></div>
                 <div><pre>Departamento*        <select class="content_largo" name="departamento" id="departamento" required onchange="infoCentro(this.value, 'municipio', 'View/CatalogoIndicativa/CatalogoIndicativaFormulario.php', 3)"><?= Indicativa::listadepartamentos($datos->getMunicipio())?></select></pre></div>
                 <div><pre>Municipios*          <select class="content_largo" name="municipio" id="municipio" required><option value="">MUNICIPIOS</option></select></pre></div>
                 <div><pre>Año Termino*         <select class="content_largo" name='anio_termina' value='<?=$datos->getAnio_termina()?>' id="anio_termina" required>
@@ -128,21 +136,21 @@ if($id==1){ ?>
                         <tr>
                             <td>
                             MADRUGADA<br><br>
-                            <input class="content_largo" type="text" class="cursos" name='cursos[1]' id="cursos1" value='<?=$jornada1?>' onkeyup="validarCursos(this.value)" required />
+                            <input class="content_largo" type="text" class="cursos" name='cursos[0]' id="cursos1" value='<?=$jornada1?>' onkeyup="validarCursos(this.value)" required />
                            
                             </td>
                             <td>
                             DIURNA<br><br>
-                            <input class="content_largo" type="text" class="cursos" name='cursos[2]' id="cursos2" value='<?=$jornada2?>' onkeyup="validarCursos(this.value)" required/>
+                            <input class="content_largo" type="text" class="cursos" name='cursos[1]' id="cursos2" value='<?=$jornada2?>' onkeyup="validarCursos(this.value)" required/>
                            
                             </td>
                             <td>
                             NOCTURNA<br><br>
-                            <input class="content_largo" type="text" class="cursos" name='cursos[3]' id="cursos3" value='<?=$jornada3?>' onkeyup="validarCursos(this.value)" required/>
+                            <input class="content_largo" type="text" class="cursos" name='cursos[2]' id="cursos3" value='<?=$jornada3?>' onkeyup="validarCursos(this.value)" required/>
                             </td>
                             <td>
                             MIXTA<br><br>
-                            <input class="content_largo" type="text" class="cursos" name='cursos[4]' id="cursos4" value='<?=$jornada4?>' onkeyup="validarCursos(this.value)" required/>
+                            <input class="content_largo" type="text" class="cursos" name='cursos[3]' id="cursos4" value='<?=$jornada4?>' onkeyup="validarCursos(this.value)" required/>
                             </td>
                         </tr>    
                        <?=$tabla?>
@@ -180,11 +188,13 @@ if($id==1){ ?>
            $lista.="</label>";
            print_r($lista);
         } 
-     }else{
+} elseif ($cod_centro!='') {
          print_r("<label style='font-size:0.9em;'><br>
                 BUSCANDO PROGRAMA.....
            </label>");
-     }
+}else{
+     print_r("");
+}
      
  }elseif ($id==3) {
      $lista="<option value=''>MUNICIPIOS</option>";     
@@ -478,18 +488,79 @@ if($id==1){ ?>
             $contador=$contador+$datosReporte[$i][0];
             $aprendiz=$aprendiz+$datosReporte[$i][6];
         }  
+   
         
-   $tipos= ConectorBD::ejecutarQuery("select tipo, modalidad from pe04 group by tipo, modalidad order by modalidad asc;", null);
+   $tipos= ConectorBD::ejecutarQuery("select tipo, modalidad from pe04 group by tipo, modalidad order by modalidad asc;", null)   ;
+  
    $cursos_esp= ConectorBD::ejecutarQuery("select count(sede), tipo, SUM(total_aprendiz), programa_especial, modalidad from pe04 where sede='$centroGestion' and (date_part('year',fecha_fin)='".($anioFin+1)."' or date_part('year',fecha_fin)='".($anioFin+2)."' or date_part('year',fecha_fin)='".($anioFin+3)."') group by tipo, programa_especial, modalidad order by modalidad asc;", null);    
    
    $integracion=0;
    $integracionNo=0;
-   $titulo='';
+   $titulo='';   
+   $porsentaje='60%';
+   $porsentajeVirtual='10%';
    
    for ($j = 0; $j < count($tipos); $j++) {
         $integracion=0;
         $integracionNo=0;
         $titulo='';
+         if($tipos[$j][1]=='VIRTUAL'){
+            $porsentaje='0%';
+            $porsentajeVirtual='70%';  
+         }else{
+            $porsentaje='60%';
+            $porsentajeVirtual='10%';
+         }
+        if(!isset($tipos[$j-1][0])!=1){
+            if($tipos[$j][1]!=$tipos[$j-1][1]){
+               
+                $listaD.="  <table style='border: 1px black solid'>
+                            <tr>
+                            <th>
+                            ".strtoupper($tipos[$j][1])."
+                            </th>
+                            </tr>
+                            <tr style='background: rgb(52, 152, 219)'>
+                            <td> NIVEL</td>
+                            <td> CUPOS PASAN</td>
+                            <td> META ASIGNADA</td>  
+                            <td> META A PROGRAMAR</td>
+                            <td> PRIMER TRIM. ($porsentaje)</td>
+                            <td> SEGUNDO TRIM. ($porsentajeVirtual)</td>
+                            <td> TERCER TRIM. (20%)</td>
+                            <td> CUARTO TRIM. (10%)</td>
+                            <td style='background: rgba(130, 224, 170)'> PRIMER TRIM. (Total)</td>
+                            <td style='background: rgba(130, 224, 170)'> SEGUNDO TRIM. (Total)</td>
+                            <td style='background: rgba(130, 224, 170)'> TERCER TRIM. (Total)</td>
+                            <td style='background: rgba(130, 224, 170)'> CUARTO TRIM. (Total)</td>
+                            <td style='background: rgba(245, 176, 65)'> ENVIAR META</td>
+                            </tr> ";
+            }
+        }else{
+            $listaD.="  <table style='border: 1px black solid'>
+                        <tr>
+                        <th>
+                        ".strtoupper($tipos[$j][1])."
+                        </th>
+                        </tr>
+                        <tr style='background: rgb(52, 152, 219)'>
+                        <td> NIVEL</td>
+                        <td> CUPOS PASAN</td>
+                        <td> META ASIGNADA</td>  
+                        <td> META A PROGRAMAR</td>
+                        <td> PRIMER TRIM. ($porsentaje)</td>
+                        <td> SEGUNDO TRIM. ($porsentajeVirtual)</td>
+                        <td> TERCER TRIM. (20%)</td>
+                        <td> CUARTO TRIM. (10%)</td>
+                        <td style='background: rgba(130, 224, 170)'> PRIMER TRIM. (Total)</td>
+                        <td style='background: rgba(130, 224, 170)'> SEGUNDO TRIM. (Total)</td>
+                        <td style='background: rgba(130, 224, 170)'> TERCER TRIM. (Total)</td>
+                        <td style='background: rgba(130, 224, 170)'> CUARTO TRIM. (Total)</td>
+                        <td style='background: rgba(245, 176, 65)'> ENVIAR META</td>
+                        </tr> ";
+        }
+       
+         
        for ($k = 0; $k < count($cursos_esp); $k++) {
            if($tipos[$j][0]==$cursos_esp[$k][1] && substr($cursos_esp[$k][3], 0,15)!='INTEGRACION CON' && $tipos[$j][1]==$cursos_esp[$k][4]){
                $integracionNo=$integracionNo+$cursos_esp[$k][2];
@@ -503,9 +574,9 @@ if($id==1){ ?>
         $listaD.= (!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null))) ? "<td style='border: 1px black solid' name='".trim($tipos[$j][0].$tipos[$j][1])."' >".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][2]."</td>" : " <td style='border: 1px black solid' name='".trim($tipos[$j][0].$tipos[$j][1])."'>$integracionNo</td> "; 
         $listaD.="<td style='border: 1px black solid'><input type='number' ";
          if($persona=='SA' || $persona=='GI'){
-            $listaD.= (!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null))) ? " value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][3]."'" : " onkeyup='llenarForm(this.value, this.name, $integracionNo, `$centroGestion`)' "; 
+            if(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null))) $listaD.= " value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][3]."'"; else $listaD.= " onkeyup='llenarForm(this.value, this.name, $integracionNo, `$centroGestion`, event)' "; 
         }else{
-            $listaD.= (!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null))) ? " value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][3]."'" : ""; 
+            if(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null))) $listaD.=" value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0].$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][3]."'"; else $listaD.= ""; 
         }
         $listaD.=" name='".trim($tipos[$j][0].$tipos[$j][1])."' id='".trim($tipos[$j][0].$tipos[$j][1])."' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/></td>";
         $listaD.="<td style='border: 1px black solid' class='".trim($tipos[$j][0].$tipos[$j][1])."'></td>";
@@ -525,9 +596,9 @@ if($id==1){ ?>
             $listaD.=(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null))) ? "<td style='border: 1px black solid' name='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."'>".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][2]."</td>" : " <td style='border: 1px black solid' name='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."'>$integracion</td> " ;
             $listaD.="<td style='border: 1px black solid'><input type='number' ";
             if($persona=='SA' || $persona=='GI'){
-                $listaD.=(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null))) ? "value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][3]."'" : " onkeyup='llenarForm(this.value, this.name, $integracion, `$centroGestion`)' " ;
+                if(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null))) $listaD.= "value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][3]."'"; else $listaD.= " onkeyup='llenarForm(this.value, this.name, $integracion, `$centroGestion`, event)' " ;
             }else{
-                $listaD.=(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null))) ? "value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][3]."'" : "" ;
+                if(!empty(ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null))) $listaD.= "value='".ConectorBD::ejecutarQuery("select * from meta where anio='".($anioFin+1)."' and nombre_tipo='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' and sede='$centroGestion' ", null)[0][3]."'"; else $listaD.= "" ;
             }
             $listaD.=" name='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' id='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."' style='height:25px;width:80px;background:rgba(245, 176, 65, 0.7);margin:2px;'/></td>";
             $listaD.="<td style='border: 1px black solid' class='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."'></td>";
@@ -541,9 +612,9 @@ if($id==1){ ?>
             $listaD.="<td style='border: 1px black solid' class='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."'></td>";
             $listaD.="<td style='border: 1px black solid' class='".trim($tipos[$j][0]."INTEGRACION".$tipos[$j][1])."'></td>";
             $listaD.="</tr>";
-       }      
+        } 
    }
-         
+   $listaD.="</table>";      
     ?>
             <link rel="stylesheet" href="css/CatalogoIndicativa.css">
             <label id='avisoIndicativa'></label>
@@ -576,24 +647,7 @@ if($id==1){ ?>
                 </tr>
             </table><br><br>
             
-            <table style='border: 1px black solid'>
-                <tr style='background: rgb(52, 152, 219)'>
-                    <td> NIVEL</td>
-                    <td> CUPOS PASAN</td>
-                    <td> META ASIGNADA</td>  
-                    <td> META A PROGRAMAR</td>
-                    <td> PRIMER TRIM. (60%)</td>
-                    <td> SEGUNDO TRIM. (10%)</td>
-                    <td> TERCER TRIM. (20%)</td>
-                    <td> CUARTO TRIM. (10%)</td>
-                    <td style="background: rgba(130, 224, 170)"> PRIMER TRIM. (Total)</td>
-                    <td style="background: rgba(130, 224, 170)"> SEGUNDO TRIM. (Total)</td>
-                    <td style="background: rgba(130, 224, 170)"> TERCER TRIM. (Total)</td>
-                    <td style="background: rgba(130, 224, 170)"> CUARTO TRIM. (Total)</td>
-                    <td style="background: rgba(245, 176, 65)"> ENVIAR META</td>
-                </tr>   
-                <?=$listaD?>
-            </table>
+           <?=$listaD?>
 
 <?php }else{     print_r("NO HAY INFORMACIÓN PE-04 ");}
       }elseif ($id==9) {

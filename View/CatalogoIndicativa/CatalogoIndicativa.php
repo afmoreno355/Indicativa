@@ -84,7 +84,7 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
     const obtenerParametroTipoFormacion = () => {
         const e = document.getElementById("id_formacion");
         const tipoFormacion = e.options[e.selectedIndex].value;
-        return !tipoFormacion || tipoFormacion == "" ? "": "&tipoFormacion=" + tipoFormacion;  
+        return !tipoFormacion || tipoFormacion == "" ? "" : "&tipoFormacion=" + tipoFormacion;  
     };
 
     const siguiente = () => {

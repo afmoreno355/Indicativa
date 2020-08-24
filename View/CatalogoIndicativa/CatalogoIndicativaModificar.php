@@ -25,6 +25,7 @@ if(isset($cadenaValorNuevo)){
     session_start() ;
     $nuevo_POST = Indicativa::decryptIt($cadenaValorNuevo);
     foreach ($nuevo_POST as $key => $value) ${$key}=  $value;
+    $cursos = explode('<|', $cursos);
 }
 switch ($accionU){
     case 'ADICIONAR':
@@ -61,7 +62,7 @@ switch ($accionU){
                                                 . "curso = {$indicativa->getCurso()} and ambiente_requiere = {$indicativa->getAmbiente_requiere()} and gira_tecnica = '{$indicativa->getGira_tecnica()}' and programa_fic = '{$indicativa->getPrograma_fic()}' and "
                                                 . "id_modalidad = {$indicativa->getId_modalidad()} and formacion = '{$indicativa->getFormacion()}' and identificacion = '{$indicativa->getIdentificacion()}' and "
                                                 . "fecha = '{$indicativa->getFecha()}'  order by id_indicativa desc limit 1", null);
-            ConectorBD::ejecutarQuery("insert into jornada(madrugada, diurna, nocturna, mixta, id_indicativa) values({$cursos[1]},{$cursos[2]},{$cursos[3]},{$cursos[4]}, {$jornadasId[0][0]})", null);
+            ConectorBD::ejecutarQuery("insert into jornada(madrugada, diurna, nocturna, mixta, id_indicativa) values({$cursos[0]},{$cursos[1]},{$cursos[2]},{$cursos[3]}, {$jornadasId[0][0]})", null);
             $_SESSION['aviso']="EL FORMULARIO FUE CREADO CON EXITO"; 
     header("location: index.php?CONTENIDO=View/CatalogoIndicativa/CatalogoIndicativa.php");
     break;    
