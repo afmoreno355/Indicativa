@@ -5,9 +5,9 @@
  */
 
 /**
- * Description of pertinencia
+ * consulta de pertinencia
  *
- * @author Gildardo Restrepo
+ * Gildardo Restrepo
  */
 
 class Pertinencia {   
