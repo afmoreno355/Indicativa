@@ -1,0 +1,69 @@
+CREATE TABLE public.programa_especial
+(
+    id smallint NOT NULL DEFAULT nextval('complementaria_id_seq'::regclass),
+    codigo character varying COLLATE pg_catalog."default" NOT NULL,
+    nombre character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT complementaria_pkey PRIMARY KEY (id)
+);
+
+INSERT INTO public.programa_especial"(
+	codigo, nombre)
+	VALUES ( '1001', 'AMBIENTES VIRTUALES DE APRENDIZAJE'),
+	( '1002', 'AULAS ABIERTAS'),
+	( '1003', 'AULA MÓVIL'),
+	( '1004', 'PROGRAMA DE EMPRENDIMIENTO'),
+	( '1005', 'CATEDRA VIRTUAL DE PENSAMIENTO EMPRESARIAL'),
+	( '1008', 'ALIANZAS ESTRATEGICAS'),
+	( '1013', 'PROGRAMA DE BILINGUISMO'),
+	( '1014', 'ALTA GERENCIA'),
+	( '2000', 'INTEGRACIÓN CON LA EDUCACIÓN MEDIA TÉCNICA'),
+	( '2010', 'INTEGRACIÓN CON LA EDUCACIÓN MEDIA ACADÉMICA'),
+	( '2115', '100 MIL OPORTUNIDADES PARA LOS JÓVENES'),
+	( '2135', 'ATENCION A INSTITUCIONES'),
+	( '2155', 'TecnoAcademia - SENNOVA'),
+	( '2175', 'SER'),
+	( '2176', 'SER POSCONFLICTO'),
+	( '2177', 'POSCONFLICTO'),
+	( '2195', 'FORMACIÓN ESPECIAL MIPYMES-PND'),
+	( '2196', 'FORMACIÓN ESTRATEGIA DUAL');
+
+ALTER TABLE programas
+ADD COLUMN programa_especial_id smallint;
+
+ALTER TABLE programas
+ADD CONSTRAINT programaEspecial_id_programas_fkey 
+FOREIGN KEY (programa_especial_id) 
+REFERENCES programa_especial(id);
+
+INSERT INTO public.programas(
+	id_programa, nombre_programa, nivel_formacion, duracion,
+	red_conocimiento, linea_tecnologica, programa_especial_id)
+	VALUES ('22810741', 'USO DE EXCEL Y ACCESS PARA EL DESARROLLO DE APLICACIONES ADMINISTRATIVAS EMPRESARIALES',
+			'CURSO ESPECIAL', 2, 4, null, 1);
+
+CREATE TABLE public.complementaria
+(
+    id integer NOT NULL DEFAULT nextval('complementaria_id_seq'::regclass),
+    cod_centro character varying(6) COLLATE pg_catalog."default" NOT NULL,
+    vigencia character varying(4) COLLATE pg_catalog."default" NOT NULL,
+    id_programa character varying(8) COLLATE pg_catalog."default" NOT NULL,
+    especialidad character varying(10) COLLATE pg_catalog."default",
+    id_modalidad integer NOT NULL,
+    fecha_inicio timestamp without time zone NOT NULL,
+    oferta integer,
+    grupos smallint NOT NULL,
+    mes_inicio character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    mes_fin character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    programa_fic character varying(2) COLLATE pg_catalog."default",
+    CONSTRAINT complementaria_pkey PRIMARY KEY (id)
+);
+
+ALTER TABLE jornada
+ADD CONSTRAINT jornada_id_complementaria_fkey 
+FOREIGN KEY (id_complementaria) 
+REFERENCES complementaria(id);
+
+INSERT INTO public.complementaria(cod_centro, vigencia, id_programa, 
+				  especialidad, id_modalidad, fecha_inicio, 
+				  oferta, grupos, mes_inicio, mes_fin, programa_fic)
+VALUES (9536,2021,'22810741','',2,'2020-07-25 13:53:41',1,2,'9','10','n')

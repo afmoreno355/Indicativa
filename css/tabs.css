@@ -2,13 +2,14 @@
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
-    background-color: #f1f1f1;
+    /*background-color: #f1f1f1;*/
 }
 
 .tab-container{
     width: 90%;
     margin-left: 5%;
     margin-bottom: 30px;
+    background-color: white;
 }
   
 /* Style the buttons inside the tab */

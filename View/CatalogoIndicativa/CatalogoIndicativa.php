@@ -25,7 +25,14 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
     $lista.="<option value='{$tiposFormacion[$i][0]}'>{$tiposFormacion[$i][0]}</option>";
 }
 
+$tipos_programa_especial = ProgramaEspecial::obtenerLista();
+$pe="";
+for ($i = 0; $i < count($tipos_programa_especial); $i++) {
+    $pe.="<option value='{$tipos_programa_especial[$i]->GetId()}'>{$tipos_programa_especial[$i]->GetNombre()}</option>";
+}
+
 ?>
+
 <div class="tituloDonde">
     <label>CatalogoIndicativa :: CatalogoIndicativa </label><br> 
    <label>Centro :: <?=$sede?> </label> 
@@ -64,8 +71,29 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
     </div>
 
     <div id="complementaria" class="tabcontent">
-        <h3>Paris</h3>
-        <p>Paris is the capital of France.</p> 
+        <div style="margin-top:15px;margin-bottom:15px">
+            Programa Especial
+            <select onchange="cargarTablaComplementaria()" class="content_largo" name="id_programa_especial" id="id_programa_especial" required="">
+                <option value="" selected>Todas</option>
+                <?=$pe?>
+            </select>
+        </div>
+        
+        <table id="tableIntC" class="tableIntT tableIntTa" style="width:100%;margin-left:0;"></table>
+
+        <table class="tableIntT c">   
+            <tr>
+                <td  colspan="3" class="noHover">
+                    <button class="fas fa-angle-double-left" name="Atras" id="Atras" title="Pag Atras" onclick="anterior()"></button>
+                    <label class="pag" name="pag" id="pag">1</label>
+                    <button class="fas fa-angle-double-right" name="Adelante" id="Adelante" title="Pag Adelante" onclick="siguiente()"></button>
+                </td>  
+            </tr>       
+        </table>
+
+        <div id="formDetalle" style="display: none;"></div>
+        
+        <table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;"></table>
     </div>
 </div>
 
@@ -77,10 +105,10 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
 
 <script>
 
-    const obtenerParametroTipoFormacion = () => {
-        const e = document.getElementById("id_formacion");
-        const tipoFormacion = e.options[e.selectedIndex].value;
-        return !tipoFormacion || tipoFormacion == "" ? "": "&tipoFormacion=" + tipoFormacion;  
+    const obtenerParametro = (nombreParamentro, id) => {
+        const e = document.getElementById(id);
+        const value = e.options[e.selectedIndex].value;
+        return !value || value == "" ? "": "&"+nombreParamentro+"=" + value;  
     };
 
     const siguiente = () => {
@@ -101,14 +129,26 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
     };
 
     const cargarTablaIndicadores = () => {
-        const param = obtenerParametroTipoFormacion();
+        const param = obtenerParametro("tipoFormacion","id_formacion"); //tipo de formación
+        //console.log(param);
         idexistentesReCa('',
                         'user=<?=$_SESSION['user']?>&pagina=0&centroGestion=<?=$centroGestion?>' + param,
                         'tableIntT',
                         'View/CatalogoIndicativa/CatalogoIndicativaTabla.php')
     };
 
-    window.addEventListener('load', cargarTablaIndicadores());
+    const cargarTablaComplementaria = () => {
+        const param = obtenerParametro("programa_especial","id_programa_especial"); //programa especial
+        idexistentesReCa('',
+                        'user=<?=$_SESSION['user']?>&pagina=0&centroGestion=<?=$centroGestion?>' + param,
+                        'tableIntC',
+                        'View/CatalogoIndicativa/CatalogoComplementariaTabla.php')
+    };
+
+    window.addEventListener('load', () => {
+        cargarTablaIndicadores();
+        cargarTablaComplementaria();
+    });
 
     function openTab(evt, tadId) {
         var i, tabcontent, tablinks;

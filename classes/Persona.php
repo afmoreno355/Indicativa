@@ -28,8 +28,6 @@ class Persona {
     private $password;
     private $imagen;
     
-    
-    
     function __construct($campo, $valor) {
         if ($campo!=null) {
             if (is_array($campo)) {
