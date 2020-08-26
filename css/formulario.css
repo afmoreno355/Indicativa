@@ -119,6 +119,9 @@ table{
     padding: 10px;
     margin-left: 5%
 }
+.content title{
+    cursor: pointer;
+}
 .content input{
     width: 300px;
     margin-left: 2%

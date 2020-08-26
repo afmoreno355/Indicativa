@@ -5,12 +5,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+session_start();
+
 require_once dirname(__FILE__).'/../../classes/ConectorBD.php';
 require_once dirname(__FILE__).'/../../classes/Indicativa.php';
 require_once dirname(__FILE__).'/../../classes/Modalidad.php';
 require_once dirname(__FILE__).'/../../classes/Persona.php';
 
 $info='';
+$sia='';
+$noa='';
 $sig='';
 $nog='';
 $sip='';
@@ -50,6 +54,11 @@ if($info==''){
     }elseif($datos->getPrograma_fic()=='n'){
       $nop='checked';
     }  
+    if($datos->getAmbiente_requiere()=='s'){
+      $sia='checked';
+    }elseif($datos->getAmbiente_requiere()=='n'){
+      $noa='checked';
+    }  
     $valorJor = ConectorBD::ejecutarQuery("select * from jornada where id_indicativa={$datos->getId_indicativa()}", null);
     $jornada1=$valorJor[0][1];
     $jornada2=$valorJor[0][2];
@@ -83,7 +92,7 @@ if($id==1){ ?>
             <div class="content">
                 <div><pre>Fecha de Registro  <?=$fecha_actual?></pre></div>                 
                 <div class="titulos" id="infoCentrosF" style='margin-left: -5px; margin-top:-30px;'>
-                <?PHP $infoCentroConector=ConectorBD::ejecutarQuery("select codigosede, nombresede, nom_departamento, id from sede, departamento where sede.departamento=departamento.id and codigosede=(select idsede from persona where identificacion='$user');", 'eagle_admin');
+                <?PHP $infoCentroConector=ConectorBD::ejecutarQuery("select codigosede, nombresede, nom_departamento, id from sede, departamento where sede.departamento=departamento.id and codigosede=(select idsede from persona where identificacion='{$_SESSION['user']}');", 'eagle_admin');
                  print_r("<label style='font-size:0.9em;'><br>
                         Codigo de Centro:  {$infoCentroConector[0][0]}<br>
                         Nombre de Centro:  {$infoCentroConector[0][1]}<br>
@@ -95,13 +104,13 @@ if($id==1){ ?>
                 <div><pre>Vigencia*            <select class="content_largo" name='vigencia' value='<?=$datos->getVigencia()?>' id="vigencia" required>
                                                      <?=$options?>
                                                </select></pre></div>
-                <div><pre>Codigo Programa*     <input class="content_largo" list='codigosP' name='id_programa' oninput="infoCentro(this.value, 'infoCentrosP', 'View/CatalogoIndicativa/CatalogoIndicativaFormulario.php', '2&user=<?=$user?>')" value='<?=$datos->getId_programa()?>' id="id_programa" required>
+                <div><pre>Modalidad*           <select class="content_largo" name="id_modalidad" id="id_modalidad" required onclick="idexistentesReCa('','id=9&virtual='+this.value,'inicio','View/CatalogoIndicativa/CatalogoIndicativaFormulario')" onmouseup="limpiar();"   ><?= Modalidad::lista($datos->getId_modalidad())?></select></pre></div>
+                <div><pre>Codigo Programa*     <input class="content_largo" list='codigosP' name='id_programa' oninput="infoCentro(this.value, 'infoCentrosP', 'View/CatalogoIndicativa/CatalogoIndicativaFormulario.php', '2')" value='<?=$datos->getId_programa()?>' id="id_programa" required>
                                                <datalist id='codigosP'>
                                                     <?= Indicativa::listaprogramas($infoCentroConector[0][0])?>
                                                </datalist>
                 </pre></div>   
                 <div class="titulos" id="infoCentrosP" style='margin-left: -5px; margin-top:-30px;'></div>
-                <div><pre>Modalidad*           <select class="content_largo" name="id_modalidad" id="id_modalidad" required onclick="idexistentesReCa('','id=9&virtual='+this.value,'inicio','View/CatalogoIndicativa/CatalogoIndicativaFormulario')"><?= Modalidad::lista($datos->getId_modalidad())?></select></pre></div>
                 <div><pre>Mes de Inicio*       <select class="content_largo" name="inicio" id="inicio" required>
                                                            <?=$inicio?>
                                                </select></pre></div> 
@@ -123,7 +132,7 @@ if($id==1){ ?>
                                                      <?=$options1?>
                                                </select></pre></div>
                 <div><pre>Cursos*              <input class="content_largo" type="text" class="curso" name='curso' id="curso" value='<?=$datos->getCurso()?>' required/></pre></div>
-                <div><pre>Ambientes Requiere*  <input class="content_largo" type="text" class="ambiente_requiere" name='ambiente_requiere' id="ambiente_requiere" value='<?=$datos->getAmbiente_requiere()?>' required /></pre></div>
+                <div><pre>Ambientes Requiere*  si<input value="s" type="radio" name="ambiente_requiere" id="ambiente_requiere1" <?= $sia ?>/>  no<input value="n" type="radio" name="ambiente_requiere" id="ambiente_requiere2" <?= $noa ?>/></pre></div>
                 <div><pre>Gira Tecnica*    si<input value="s" type="radio" name="gira_tecnica" id="gira_tecnica1" <?= $sig ?>/>  no<input value="n" type="radio" name="gira_tecnica" id="gira_tecnica2" <?= $nog ?>/></pre></div>
                 <div><pre>Programa Fic*    si<input value="s" type="radio" name="programa_fic" id="programa_fic1" <?= $sip ?>/>  no<input value="n" type="radio" name="programa_fic" id="programa_fic2" <?= $nop ?>/></pre></div>
                 <div class="table">
@@ -166,37 +175,47 @@ if($id==1){ ?>
      date_default_timezone_set("America/Bogota");
      $anio = date("Y",time());
      $lista='';
-     $permisos = new Persona(' identificacion ', "'$user'");
+     $si=false;
+     $permisos = new Persona(' identificacion ', "'{$_SESSION['user']}'");
 
-     $infoCentroConector=ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion from  programas where id_programa='$cod_centro';", 'eagle_admin');
-     $registroCalificado=ConectorBD::ejecutarQuery("select id_sede , lugar_desarrollo.id_resolucion, resoluciones.id_resolucion,fecha_resolucion,denominacion_programa ,modalidad,nivel_programa ,modalidad   from lugar_desarrollo, resoluciones where resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='{$permisos->getidsede()}' and lugar_desarrollo.resuelve='OTORGAMIENTO' and fecha_resolucion::date+'7 year'::interval >= 'now()' and denominacion_programa ='$cod_centro';", 'registro');
-     $pertinencia= ConectorBD::ejecutarQuery("select indice_pertinencia from pertinencia where centro='{$permisos->getidsede()}' and  programa = '$cod_centro' and anio='$anio'", null); 
-     
-     if(!empty($infoCentroConector)){
-        if((empty($registroCalificado) && ($infoCentroConector[0][2]=='TECNOLOGIA' || $infoCentroConector[0][2]=='ESPECIALIZACION TECNOLOGICA' ))){
-            print_r("<label style='font-size:0.9em;'><br>
-                PROGRAMA SIN REGISTRO CALIFICADO O NO REGISTRA EN EL SISTEMA!!
-           </label>");
-        }else{
-           $lista="<label style='font-size:0.9em;'><br>
+    if($id_modalidad!=''){
+        if(!empty($infoCentroConector=ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion from  programas where id_programa='$cod_centro';", 'eagle_admin'))){
+            if($infoCentroConector[0][2]=='TECNOLOGIA' || $infoCentroConector[0][2]=='ESPECIALIZACION TECNOLOGICA'){
+                $si = (!empty($tecnologos= ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion, denominacion_programa, metodologia from lugar_desarrollo, resoluciones,modalidad, dblink('dbname=eagle_admin port=5432 user=felipe password=123' , 'select id_programa,nombre_programa,nivel_formacion,duracion from programas') as t2  (id_programa text,nombre_programa text,nivel_formacion text,duracion text ) where modalidad=id_metod and id_programa=denominacion_programa and resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='{$permisos->getidsede()}' and lugar_desarrollo.resuelve='OTORGAMIENTO' and denominacion_programa ='$cod_centro' and fecha_resolucion::date+'7 year'::interval >= 'now()' and modalidad='$id_modalidad' group by id_programa,nombre_programa,nivel_formacion,duracion, denominacion_programa, metodologia;",'registro'))) 
+                ? true
+                : false ;
+            } else {
+                $si = true;
+            } 
+
+            if($si==true){
+                $lista="<label style='font-size:0.9em;'><br>
                 Codigo de Programa:  {$infoCentroConector[0][0]}<br>
                 Nombre de Programa:  {$infoCentroConector[0][1]}<br>
                 Nivel de Formacion:  {$infoCentroConector[0][2]}<br>
                 Duracion:            {$infoCentroConector[0][3]} Meses<br>";
-                    
-           $lista.=(!empty($pertinencia))?"Pertinencia:         {$pertinencia[0][0]}%<br><br>":'Pertinencia:         0%<br><br>';
-           $lista.="</label>";
-           print_r($lista);
-        } 
-} elseif ($cod_centro!='') {
-         print_r("<label style='font-size:0.9em;'><br>
-                BUSCANDO PROGRAMA.....
-           </label>");
-}else{
-     print_r("");
-}
-     
- }elseif ($id==3) {
+                
+                $lista.=(!empty($pertinencia= ConectorBD::ejecutarQuery("select indice_pertinencia from pertinencia where centro='{$permisos->getidsede()}' and  programa = '$cod_centro' and anio='$anio'", null)))?"Pertinencia:         {$pertinencia[0][0]}%<br><br>":'Pertinencia:         0%<br><br>';
+                $lista.="</label>";
+             }
+
+
+        } elseif ($cod_centro!='') {
+                $lista="<label style='font-size:0.9em;'><br>
+                          EL PROGRAMA NO REGISTRA
+                        </label>";
+        } else {
+             $lista="";
+        }
+    } else {
+        $lista="<label style='font-size:0.9em;'><br>
+                    MODALIDAD SIN LLENAR
+                </label>";
+    }
+    
+    print_r($lista);   
+    
+}elseif ($id==3) {
      $lista="<option value=''>MUNICIPIOS</option>";     
      $infoCentroConector=ConectorBD::ejecutarQuery("select * from municipio where id_departamento=$cod_centro;", 'eagle_admin');
      for ($i = 0; $i < count($infoCentroConector); $i++) {
@@ -454,7 +473,7 @@ if($id==1){ ?>
    $trimestres='';
    $anioFin= date('Y');
 
-   $persona= ConectorBD::ejecutarQuery("select  idtipo from persona where identificacion='$user'", 'eagle_admin')[0][0];
+   $persona= ConectorBD::ejecutarQuery("select  idtipo from persona where identificacion='{$_SESSION['user']}'", 'eagle_admin')[0][0];
    $datosReporte= ConectorBD::ejecutarQuery("select count(sede), sede, tipo, date_part('month',fecha_fin), date_part('year',fecha_fin), jornada, SUM(total_aprendiz) from pe04 where sede='$centroGestion' and (date_part('year',fecha_fin)='".($anioFin+1)."' or date_part('year',fecha_fin)='".($anioFin+2)."' or date_part('year',fecha_fin)='".($anioFin+3)."') group by sede, tipo, date_part('month',fecha_fin), date_part('year',fecha_fin), jornada  order by date_part('year',fecha_fin), date_part('month',fecha_fin), tipo;", null);    
    if(!empty($datosReporte)){
         $columns= count($datosReporte)+1;
