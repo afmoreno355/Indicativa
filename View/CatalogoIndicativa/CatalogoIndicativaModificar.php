@@ -25,6 +25,7 @@ if(isset($cadenaValorNuevo)){
     session_start() ;
     $nuevo_POST = Indicativa::decryptIt($cadenaValorNuevo);
     foreach ($nuevo_POST as $key => $value) ${$key}=  $value;
+    $cursos = explode('<|', $cursos);
 }
 switch ($accionU){
     case 'ADICIONAR':
@@ -58,10 +59,10 @@ switch ($accionU){
             $jornadasId=ConectorBD::ejecutarQuery("select id_indicativa from indicativa where cod_centro = '{$indicativa->getCod_centro()}' and "
                                                 . "vigencia = '{$indicativa->getVigencia()}' and oferta = {$indicativa->getOferta()} and id_programa = '{$indicativa->getId_programa()}' "
                                                 . "and inicio = {$indicativa->getInicio()} and cupos = {$indicativa->getCupos()} and municipio = {$indicativa->getMunicipio()} and anio_termina  = '{$indicativa->getAnio_termina()}' and "
-                                                . "curso = {$indicativa->getCurso()} and ambiente_requiere = {$indicativa->getAmbiente_requiere()} and gira_tecnica = '{$indicativa->getGira_tecnica()}' and programa_fic = '{$indicativa->getPrograma_fic()}' and "
+                                                . "curso = {$indicativa->getCurso()} and ambiente_requiere = '{$indicativa->getAmbiente_requiere()}' and gira_tecnica = '{$indicativa->getGira_tecnica()}' and programa_fic = '{$indicativa->getPrograma_fic()}' and "
                                                 . "id_modalidad = {$indicativa->getId_modalidad()} and formacion = '{$indicativa->getFormacion()}' and identificacion = '{$indicativa->getIdentificacion()}' and "
                                                 . "fecha = '{$indicativa->getFecha()}'  order by id_indicativa desc limit 1", null);
-            ConectorBD::ejecutarQuery("insert into jornada(madrugada, diurna, nocturna, mixta, id_indicativa) values({$cursos[1]},{$cursos[2]},{$cursos[3]},{$cursos[4]}, {$jornadasId[0][0]})", null);
+            ConectorBD::ejecutarQuery("insert into jornada(madrugada, diurna, nocturna, mixta, id_indicativa) values({$cursos[0]},{$cursos[1]},{$cursos[2]},{$cursos[3]}, {$jornadasId[0][0]})", null);
             $_SESSION['aviso']="EL FORMULARIO FUE CREADO CON EXITO"; 
     header("location: index.php?CONTENIDO=View/CatalogoIndicativa/CatalogoIndicativa.php");
     break;    
@@ -115,7 +116,7 @@ switch ($accionU){
         $metas->setAprediz_activo($activos);
         $metas->setMeta_concertada($meta);
         $metas->setMeta_nacional(0);
-        $metas->setSede($_SESSION['sede']);
+        $metas->setSede($sede);
         $metas->setPt($pt);
         $metas->setSt($st);
         $metas->setTt($tt);

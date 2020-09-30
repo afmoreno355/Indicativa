@@ -3,7 +3,7 @@
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
- * and open the template in the editor sin el FELIPE.
+ * and open the template in the editor.
  */
 $permisos = new Persona(' identificacion ', "'".$_SESSION['user']."'");
 
@@ -31,6 +31,19 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
    <label>Centro :: <?=$sede?> </label> 
 </div>
 
+<<<<<<< HEAD
+ <table class="tableIntT c">   
+            <tr>
+                <td  colspan="3" class="noHover">
+                    <button class="fas fa-angle-double-left" name="Atras" id="Atras" title="Pag Atras" onclick="anterior()"></button>
+                    <label class="pag" name="pag" id="pag">1</label>
+                    <button class="fas fa-angle-double-right" name="Adelante" id="Adelante" title="Pag Adelante" onclick="siguiente()"></button>
+                </td>  
+            </tr>       
+ </table>
+
+=======
+>>>>>>> 4011fea... Desagregación de la tabla de formación titulada
 <div class="tab-container sombra" style="margin-top:15px">
     <div class="tab">
         <button class="tablinks active" onclick="openTab(event, 'titulada')" title="Formación Titulada">Titulada</button>
@@ -38,6 +51,37 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
     </div>
 
     <div id="titulada" class="tabcontent" style="display: block;">
+<<<<<<< HEAD
+
+        <div style="margin-top:15px;margin-bottom:15px">
+            Tipo de Formación
+            <select onchange="cargarTablaIndicadores()" class="content_largo" name="id_formacion" id="id_formacion" required="">
+                <option value="" selected>Todas</option>
+                <?=$lista?>
+            </select>
+        </div>
+        
+        <table id="tableIntT" class="tableIntT tableIntTa" style="width:100%;margin-left:0;"></table>
+
+        <div id="formDetalle" style="display: none;"></div>
+      
+    </div>
+
+    <div id="complementaria" class="tabcontent">
+        <h3>Paris</h3>
+        <p>Paris is the capital of France.</p> 
+    </div>
+</div>
+
+<!--<<<<<<< HEAD-->
+<script src="./js/indicativa.js"> </script>
+<script src="./js/sede.js"> </script>
+ 
+<table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;">
+     
+</table>
+=======
+
         <div style="margin-top:15px;margin-bottom:15px">
             Tipo de Formación
             <select onchange="cargarTablaIndicadores()" class="content_largo" name="id_formacion" id="id_formacion" required="">
@@ -60,6 +104,8 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
 
         <div id="formDetalle" style="display: none;"></div>
         
+        <script src="./js/indicativa.js"> </script>
+        
         <table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;"></table>
     </div>
 
@@ -68,19 +114,20 @@ for ($i = 0; $i < count($tiposFormacion); $i++) {
         <p>Paris is the capital of France.</p> 
     </div>
 </div>
+>>>>>>> 4011fea... Desagregación de la tabla de formación titulada
 
-
-<script src="./js/indicativa.js"> </script>
-<script src="./js/sede.js"> </script>
- 
-<table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;"></table>
-
+<!--=======
+ 4011fea11f3de940a06445e65889a0419e407318-->
 <script>
 
     const obtenerParametroTipoFormacion = () => {
         const e = document.getElementById("id_formacion");
         const tipoFormacion = e.options[e.selectedIndex].value;
+<<<<<<< HEAD
+        return !tipoFormacion || tipoFormacion == "" ? "" : "&tipoFormacion=" + tipoFormacion;  
+=======
         return !tipoFormacion || tipoFormacion == "" ? "": "&tipoFormacion=" + tipoFormacion;  
+>>>>>>> 4011fea... Desagregación de la tabla de formación titulada
     };
 
     const siguiente = () => {

@@ -16,6 +16,9 @@ $idsProgramas;
 
 require_once dirname(__FILE__)."/../../classes/ConectorBD.php";
 require_once dirname(__FILE__)."/../../classes/Indicativa.php";
+// agregar linea de classe pertinencia. Gildardo Restrepo
+require_once dirname(__FILE__)."/../../classes/pertinencia.php";
+//fin Gildardo Restrepo
 
 foreach ($_POST as $key => $value) ${$key}=$value;
 
@@ -60,6 +63,12 @@ $numeroPaginas=ceil(Indicativa::count($filtro)[0][0]/5);
 
 for ($i = 0; $i < count($datos); $i++) {
     $objeto=$datos[$i];
+     // agregar consulta de pertinencia segun centro y programa. Gildardo Restrepo
+    $centId = $objeto->getCod_centro();
+    $progId = $objeto->getId_programa();    
+    $pertinencia = Pertinencia::pertinenciaQuery("select indice_pertinencia from pertinencia where centro = '$centId' and programa = '$progId'", 'eagle_admin');
+    //fin consulta. Gildardo Restrepo
+
         $lista.="<tr>";
         $lista.="<td>{$objeto->getCod_centro()}</td>";
         $lista.="<td>{$objeto->getId_programa()}</td>";
@@ -101,6 +110,15 @@ for ($i = 0; $i < count($datos); $i++) {
         }  elseif ($objeto->getValidar()=='E'){
             $lista.="<td style='background:rgba(51, 255, 119 , 0.3)'>NACIONAL</td>";
         } 
+
+         //mostrar resultados de consulta pertinencia si la hay. Gildardo Restrepo
+        if(isset($pertinencia["indice_pertinencia"])){
+        $lista.="<td>{$pertinencia["indice_pertinencia"]}</td>"; 
+          }else{  $lista.="<td> </td>"; }
+        // desercion no hay información para mostrar 
+        $lista.="<td></td>";
+        //fin consulta. Gildardo Restrepo
+
         $lista.="<td>";
                    $lista.=($persona[0][0]!='AI' && $objeto->getValidar()!='E' && $objeto->getValidar()!='F') ? " <pre>  <input type='button' id='button' name='1' title='Modificar' value='MODIFICAR' onclick='validarDatosInf({$objeto->getId_indicativa()},1, $user)'></pre> " : '';
                    $lista.=" <pre> <input type='button' id='button' name='3' onclick='validarDatosInf({$objeto->getId_indicativa()},2,$user)' title='Mas Informacion Resolución' value='INFO'></pre> 
@@ -121,6 +139,10 @@ for ($i = 0; $i < count($datos); $i++) {
         <th class="noDisplay">Fecha Fin</th>
         <th class="noDisplay">Programa Fic</th>
         <th>Estado</th>
+         <!-- agrego los campos en la tabla para pertinencia y deserción. Gildardo Restrepo-->
+        <th>Pertinencia</th>
+        <th>Deserción</th>
+        <!-- fin agregar campos. Gildardo Restrepo -->
         <th>
             <pre><input type='button' id='button' name='2' title='Analisis Pe-04' value='PE-04' onclick="validarDatos('','user=<?=$user?>&id=8&centroGestion=<?=$centroGestion?>','modalVentana','View/CatalogoIndicativa/CatalogoIndicativaFormulario.php')"/></pre>
             <?php if($persona!='AI' && $persona[0][0]!='SA' && $persona[0][0]!='IR' ){ if(count(ConectorBD::ejecutarQuery("select * from meta where anio='".($date+1)."'  and sede='$centroGestion' ", null))>=6) { ?><pre><input type='button' id='button' name='2' title='Adicionar Nuevo Registro de Catalogo al Sistema' value='ADICIONAR' onclick="validarDatos('','user=<?=$user?>&id=1&accion=ADICIONAR&info=','modalVentana','View/CatalogoIndicativa/CatalogoIndicativaFormulario.php')"/></pre> 

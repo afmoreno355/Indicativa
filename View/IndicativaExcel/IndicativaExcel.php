@@ -17,9 +17,35 @@ if($permisos[0][0]!='A' && $permisos[0][0]!='GI'){
           header("location: http://localhost/Eagle-nn/inicio.php?CONTENIDO=View/Usuario/Usuario.php");
 }
  
-        $nuevoNombre= explode('.', $_FILES['Excel']['name']);
-        copy($_FILES['Excel']['tmp_name'], "/wamp64/www/eagle-IN/Archivos/".$dateIndicativa."_IMPORTARC_{$_SESSION['sede']}_{$_SESSION['user']}.".$nuevoNombre[1]);
-        $_SESSION['ruta']="/wamp64/www/eagle-IN/Archivos/".$dateIndicativa."_IMPORTARC_{$_SESSION['sede']}_{$_SESSION['user']}.".$nuevoNombre[1]; 
+
+    $nuevoNombre= explode('.', $_FILES['Excel']['name']);
+    if($nuevoNombre[1]=='csv'){
+        $nuevoNombreCopy= "C:/wamp64/www/eagle-IN/Archivos/".$dateIndicativa."_IMPORTARC_{$_SESSION['sede']}_{$_SESSION['user']}.".$nuevoNombre[1];
+        if (!file_exists($nuevoNombreCopy)) {
+            if(copy($_FILES['Excel']['tmp_name'],$nuevoNombreCopy )){
+                $_SESSION['ruta']=$nuevoNombreCopy; 
+                $_SESSION['aviso']="LA ARCHIVO FUE COPIADOO CON EXITO<br>"; 
+                ?>
+                    <script>window.opener.location.reload();</script>
+                <?PHP
+            }else{
+                $_SESSION['aviso']="EL ARCHIVO NO SE PUDO COPIAR"; 
+                ?>
+                    <script>window.opener.location.reload(); window.close();</script>
+                <?PHP
+            }
+        }else{
+            $_SESSION['aviso']="EL USUARIO CON IDENTIFICACION {$_SESSION['user']} YA AGREGO UN CATALOGO PARA LA VIGENCIA ".($dateIndicativa+1); 
+             ?>
+                <script>window.opener.location.reload(); window.close();</script>
+            <?PHP
+        }
+    }else{
+        $_SESSION['aviso']="EXTENCION INCORRECTA .$nuevoNombre[1]"; 
+        ?>
+            <script>window.opener.location.reload(); window.close();</script>
+        <?PHP
+    } 
        
 ?>
 <style>    
@@ -31,7 +57,6 @@ if($permisos[0][0]!='A' && $permisos[0][0]!='GI'){
 <div class="tituloDonde">
    <label>IndicativaExcel :: Indicativa Excel Importar </label> 
 </div>
-
 
 <table id="tableIntT" class="tableIntT sombra tableIntTa">
 </table>

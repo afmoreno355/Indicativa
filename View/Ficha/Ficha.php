@@ -40,6 +40,7 @@ if($permisos[0][0]!='A' && $permisos[0][0]!='GI'){
 </div>
 
 <script src="./js/ficha.js"> </script>
+<script src="./js/indicativa.js"> </script>
  
 <table id='tablareporte' class="tableIntT tableIntTa" style="display: none;  border: 1px solid black;">
      

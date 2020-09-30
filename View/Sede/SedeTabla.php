@@ -53,10 +53,10 @@ for ($i = 0; $i < count($datos); $i++) {
         $lista.="<tr>";
         $lista.="<td class='codigoSede'>{$objeto->getCod()}</td>";
         $lista.="<td>{$objeto->getNombre()}</td>";
-        $lista.="<td id='{$objeto->getCod()}' ><p style='border-radius:50%;' class='numeroSolicitud'>$solicitudNumero</p></td>";
+        $lista.="<td id='{$objeto->getCod()}' class='noDisplay'><p style='border-radius:50%;' class='numeroSolicitud'>$solicitudNumero</p></td>";
         
         //botones de la tabla tablas
-        $lista.="<td>";
+        $lista.="<td colspan='2'>";
                    $lista.=" <pre>  <input type='button' id='button' name='1' title='Gestionar' value='GESTIONAR' onclick='centroGestion({$objeto->getCod()},1, $user)'></pre>
                  </td>
                 </tr>";
@@ -68,11 +68,12 @@ for ($i = 0; $i < count($datos); $i++) {
     <tr>
     <th>Codigo de Centro</th>
     <th>Nombre de Centro</th>
-    <th>Notificaciones</th>
+    <th class='noDisplay'>Notificaciones</th>
     <th>
-        <?PHP if($permisos->getIdTipo()!=='IR'){?><pre> <input type='button' id='button' name='2' title='PE-04' value='PE-04' onclick="validarDatos('','id=2','modalVentana','View/Sede/SedeFormulario.php')"/></pre> 
+        <?PHP if($permisos->getIdTipo()!=='IR'){?><label>PLANOS</label><br><pre> <input type='button' id='button' name='2' title='PE-04' value='PE-04' onclick="validarDatos('','id=2','modalVentana','View/Sede/SedeFormulario.php')"/></pre> 
         <pre> <input type='button' id='button' name='2' title='Indice de Pertinencia Excel' value='PERTINENCIA' onclick="validarDatos('','id=5','modalVentana','View/Sede/SedeFormulario.php')"/></pre><?php } ?>
-        <pre> <input type='button' id='button' name='2' title='Reporte Nivel Nacional o Regional' value='REPORTE' onclick="validarDatos('','id=3&user=<?=$user?>','modalVentana','View/Sede/SedeFormulario.php')"/></pre>
+    </th><th><label>REPORTES</label><br> <pre> <input type='button' id='button' name='2' title='Reporte Nivel Nacional o Regional' value='TODO' onclick="validarDatos('','id=3','modalVentana','View/Sede/SedeFormulario.php')"/></pre>
+                                         <pre> <input type='button' id='button' name='2' title='Reporte por Red de Conocimiento' value='RED' onclick="validarDatos('','id=7','modalVentana','View/Sede/SedeFormulario.php')"/></pre>
     <input type='hidden' id='numeroPaginas' value="<?=$numeroPaginas?>">
     <input type='hidden' id='user' value="<?=$user?>">
     <input type='hidden' id='bucarPalabraClave' value="<?=$bucarPalabraClave?>">

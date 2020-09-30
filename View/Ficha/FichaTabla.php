@@ -6,15 +6,20 @@
  * and open the template in the editor.
  */
 $bucarPalabraClave='';
+$filtro='';
 
 require_once dirname(__FILE__)."/../../classes/ConectorBD.php";
 
 foreach ($_POST as $key => $value) ${$key}=$value;
 
+if($bucarPalabraClave!=''){    
+    $filtro.=" and (ficha like '%". strtoupper($bucarPalabraClave)."%' or codigo_programa like '%". strtoupper($bucarPalabraClave)."%')";
+}
+
    $lista='';
    $anioFin= date('Y');
-   $datosReporte= ConectorBD::ejecutarQuery("select ficha, codigo_programa, tipo, date_part('month',fecha_fin), date_part('year',fecha_fin), jornada, total_aprendiz from pe04 where sede='$centroGestion' and (date_part('year',fecha_fin)='".($anioFin+1)."' or date_part('year',fecha_fin)='".($anioFin+2)."' or date_part('year',fecha_fin)='".($anioFin+3)."') order by ficha, tipo, codigo_programa, date_part('month',fecha_fin), date_part('year',fecha_fin) offset $pagina limit 20", null);    
-   $numeroPaginas=ceil(ConectorBD::ejecutarQuery("select count(ficha)  from pe04 where sede='$centroGestion' and (date_part('year',fecha_fin)='".($anioFin+1)."' or date_part('year',fecha_fin)='".($anioFin+2)."' or date_part('year',fecha_fin)='".($anioFin+3)."') ", null)[0][0]/20);  
+   $datosReporte= ConectorBD::ejecutarQuery("select ficha, codigo_programa, tipo, date_part('month',fecha_fin), date_part('year',fecha_fin), jornada, total_aprendiz from pe04 where sede='$centroGestion' and (date_part('year',fecha_fin)='".($anioFin+1)."' or date_part('year',fecha_fin)='".($anioFin+2)."' or date_part('year',fecha_fin)='".($anioFin+3)."') $filtro order by ficha, tipo, codigo_programa, date_part('month',fecha_fin), date_part('year',fecha_fin) offset $pagina limit 20", null);    
+   $numeroPaginas=ceil(ConectorBD::ejecutarQuery("select count(ficha)  from pe04 where sede='$centroGestion' and (date_part('year',fecha_fin)='".($anioFin+1)."' or date_part('year',fecha_fin)='".($anioFin+2)."' or date_part('year',fecha_fin)='".($anioFin+3)."') $filtro ", null)[0][0]/20);  
    $columns= count($datosReporte)+1;
         for ($i = 0; $i < count($datosReporte); $i++) {
             $lista.="<tr>";

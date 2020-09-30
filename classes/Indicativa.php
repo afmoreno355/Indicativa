@@ -268,11 +268,10 @@ class Indicativa {
     }
     
     public static function listaprogramas($centro){
-        $lista="";
-        $tecnologos= ConectorBD::ejecutarQuery("select denominacion_programa from lugar_desarrollo, resoluciones where resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='$centro' and lugar_desarrollo.resuelve='OTORGAMIENTO' and fecha_resolucion::date+'7 year'::interval >= 'now()'  group by denominacion_programa;", 'registro');
+        $lista='';
+        $tecnologos= ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion, denominacion_programa, metodologia from lugar_desarrollo, resoluciones,modalidad, dblink('dbname=eagle_admin port=5432 user=felipe password=123' , 'select id_programa,nombre_programa,nivel_formacion,duracion from programas') as t2  (id_programa text,nombre_programa text,nivel_formacion text,duracion text ) where modalidad=id_metod and id_programa=denominacion_programa and resoluciones.id_resolucion=lugar_desarrollo.id_resolucion and lugar_desarrollo.id_sede='$centro' and lugar_desarrollo.resuelve='OTORGAMIENTO' and fecha_resolucion::date+'7 year'::interval >= 'now()'  group by id_programa,nombre_programa,nivel_formacion,duracion, denominacion_programa, metodologia;",'registro');
         for ($j = 0; $j < count($tecnologos); $j++) {
-            $listaSi= ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion from  programas where id_programa='{$tecnologos[$j][0]}'", 'eagle_admin');
-            $lista.="<option value='{$listaSi[0][0]}'> {$listaSi[0][1]} {$listaSi[0][2]}</option>";
+            $lista.="<option value='{$tecnologos[$j][0]}'>{$tecnologos[$j][5]} {$tecnologos[$j][1]} {$tecnologos[$j][2]}</option>";
         }
         $si= ConectorBD::ejecutarQuery("select id_programa,nombre_programa,nivel_formacion,duracion from  programas where nivel_formacion<>'TECNOLOGIA' and nivel_formacion<>'ESPECIALIZACION TECNOLOGICA'", 'eagle_admin');
         for ($i = 0; $i < count($si); $i++) {
@@ -316,17 +315,17 @@ class Indicativa {
               curso, ambiente_requiere, gira_tecnica, programa_fic, id_modalidad, formacion, identificacion, fecha, validar) values(
                 '$this->cod_centro',
                 '$this->vigencia',
-                $this->oferta,
+                 $this->oferta,
                 '$this->id_programa',
-                $this->inicio,
-                $this->cupos,
-                $this->municipio,
+                 $this->inicio,
+                 $this->cupos,
+                 $this->municipio,
                 '$this->anio_termina',
                 '$this->curso',
-                $this->ambiente_requiere,
+                '$this->ambiente_requiere',
                 '$this->gira_tecnica',
                 '$this->programa_fic',
-                $this->id_modalidad,
+                 $this->id_modalidad,
                 '$this->formacion', 
                 '$this->identificacion', 
                 '$this->fecha',
@@ -346,7 +345,7 @@ class Indicativa {
                 municipio=$this->municipio,
                 anio_termina='$this->anio_termina',
                 curso='$this->curso',
-                ambiente_requiere=$this->ambiente_requiere,
+                ambiente_requiere='$this->ambiente_requiere',
                 gira_tecnica='$this->gira_tecnica',
                 programa_fic='$this->programa_fic',
                 id_modalidad=$this->id_modalidad,
